@@ -56,7 +56,6 @@ class Parse:
                             self.lines_list[self.index] = self.lines_list[self.index][:comment_index]
 
                         tokens = self.lines_list[self.index].split()                 
-                        print(tokens)
 
                         if (tokens[0] in ARITHEMTIC_INSTRUCTIONS):
                             self.instruction_type = C_ARITHMETIC
@@ -73,7 +72,7 @@ class Parse:
             print("No lines?")
             return None
 
-    def get_arg_one(self) -> str:
+    def getArgOne(self) -> str:
         if (self.instruction_type == C_RETURN):
             return None
 
@@ -84,7 +83,7 @@ class Parse:
 
         return tokens[1]
 
-    def get_arg_two(self) -> int:
+    def getArgTwo(self) -> int:
         tokens = self.lines_list[self.index].split()
         if (self.instruction_type == C_PUSH or self.instruction_type == C_POP):
             return int(tokens[2])
@@ -97,4 +96,4 @@ if __name__ == "__main__":
         while (parser.hasMoreLines()):
                 parser.advance()
                 print(parser.instruction_type)
-                print(parser.get_arg_one() + " " + str(parser.get_arg_two()))
+                print(parser.getArgOne() + " " + str(parser.getArgTwo()))
