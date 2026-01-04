@@ -1,3 +1,5 @@
+import copy
+
 from parser import C_PUSH
 from parser import C_POP
 
@@ -147,7 +149,7 @@ class CodeWriter:
         self.write_count = 0
 
     def writeArithmetic(self, operation : str):
-        instructions = ARITHMETIC_TRANSLATIONS[operation]
+        instructions = copy.deepcopy(ARITHMETIC_TRANSLATIONS[operation])
         if (operation == "lt" or operation == "gt" or operation == "eq"):
             # making labels unique
             for i, _ in enumerate(instructions):
@@ -162,6 +164,8 @@ class CodeWriter:
             self.file.write(instruction + '\n')
             self.write_count += 1
 
+    # def writePushPop(command_type : int, segment : str, index : int):
+
     def close(self):
         self.file.close()
 
@@ -172,5 +176,6 @@ if __name__ == "__main__":
     code_writer.writeArithmetic("not")
     code_writer.writeArithmetic("and")
     code_writer.writeArithmetic("gt")
-    code_writer.writeArithmetic("lt")
+    for _ in range(500):
+        code_writer.writeArithmetic("lt")
     code_writer.close()
