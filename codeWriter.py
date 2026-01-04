@@ -148,9 +148,15 @@ class CodeWriter:
         self.file = open(file_name, "w")
         self.write_count = 0
 
+    def _writeInstructions(self, instructions : list[str]):
+        for instruction in instructions:
+            self.file.write(instruction + '\n')
+            self.write_count += 1
+
     def writeArithmetic(self, operation : str):
-        instructions = copy.deepcopy(ARITHMETIC_TRANSLATIONS[operation])
+        instructions = ARITHMETIC_TRANSLATIONS[operation]
         if (operation == "lt" or operation == "gt" or operation == "eq"):
+            instructions = copy.deepcopy(instructions)
             # making labels unique
             for i, _ in enumerate(instructions):
                 if (instructions[i] == "(TRUE)"):
@@ -160,11 +166,55 @@ class CodeWriter:
                 elif (instructions[i] == "(END)"):
                     instructions[i] = instructions[i].replace("END", f"END{int(self.write_count)}")
 
-        for instruction in instructions:
-            self.file.write(instruction + '\n')
-            self.write_count += 1
+        self._writeInstructions(instructions)
 
-    # def writePushPop(command_type : int, segment : str, index : int):
+    def writePushPop(self, command_type : int, segment : str, index : int):
+        instructions = []
+        if (command_type == C_PUSH):
+            if (segment == "constant"):
+                constant_instructions = [
+                    f"@{index}",
+                    "D=A"
+                ] 
+                for constant_instruction in constant_instructions:
+                    instructions.append(constant_instruction)
+
+            else:
+                if (segment == "local"):
+                    instructions.append("@LCL")
+                elif (segment == "argument"):
+                    instructions.append("@ARG")
+                elif (segment == "this"):
+                    instructions.append("@THIS")
+                elif (segment == "that"):
+                    instructions.append("@THAT")
+                elif (segment == "static"):
+                    # base address for static variables (16)
+                    instructions.append("@16")
+
+                index_instructions = [
+                    "D=M",
+                    f"@{index}",
+                    "A=D+A",
+                    "D=M"
+                ] 
+
+                for index_instruction in index_instructions:
+                    instructions.append(index_instruction)
+
+
+            push_instructions = [
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
+            ]
+
+            for push_instruction in push_instructions:
+                instructions.append(push_instruction)
+
+        self._writeInstructions(instructions)
 
     def close(self):
         self.file.close()
@@ -176,6 +226,8 @@ if __name__ == "__main__":
     code_writer.writeArithmetic("not")
     code_writer.writeArithmetic("and")
     code_writer.writeArithmetic("gt")
-    for _ in range(500):
-        code_writer.writeArithmetic("lt")
+    code_writer.writePushPop(C_PUSH, "static", 0)
+    code_writer.writePushPop(C_PUSH, "local", 5)
+    code_writer.writePushPop(C_PUSH, "argument", 5)
+    code_writer.writePushPop(C_PUSH, "constant", 24)
     code_writer.close()
