@@ -3,6 +3,14 @@ import copy
 from parser import C_PUSH
 from parser import C_POP
 
+SEGMENT_TO_ASSMBLE = {
+    "local" : "@LCL",
+    "argument" : "@ARG",
+    "this" : "@THAT",
+    "that" : "@THAT",
+    "static" : "@16"
+}
+
 
 ARITHMETIC_TRANSLATIONS = {
     "add" : [
@@ -176,21 +184,11 @@ class CodeWriter:
                     f"@{index}",
                     "D=A"
                 ] 
-                for constant_instruction in constant_instructions:
-                    instructions.append(constant_instruction)
+
+                instructions += constant_instructions
 
             else:
-                if (segment == "local"):
-                    instructions.append("@LCL")
-                elif (segment == "argument"):
-                    instructions.append("@ARG")
-                elif (segment == "this"):
-                    instructions.append("@THIS")
-                elif (segment == "that"):
-                    instructions.append("@THAT")
-                elif (segment == "static"):
-                    # base address for static variables (16)
-                    instructions.append("@16")
+                instructions.append(SEGMENT_TO_ASSMBLE[segment])
 
                 index_instructions = [
                     "D=M",
@@ -199,9 +197,7 @@ class CodeWriter:
                     "D=M"
                 ] 
 
-                for index_instruction in index_instructions:
-                    instructions.append(index_instruction)
-
+                instructions += index_instructions
 
             push_instructions = [
                 "@SP",
@@ -211,8 +207,38 @@ class CodeWriter:
                 "M=M+1"
             ]
 
-            for push_instruction in push_instructions:
-                instructions.append(push_instruction)
+            instructions += push_instructions
+
+        else:
+            if (segment == "constant"):
+                constant_instructions = [
+                    f"@{index}",
+                    "D=A",
+                    "@R13",
+                    "M=D"
+                ]
+                instructions += constant_instructions
+
+            else:
+                instructions.append(SEGMENT_TO_ASSMBLE[segment])
+                index_instructions = [
+                    "D=M",
+                    f"@{index}",
+                    "D=D+A",
+                    "@R13",
+                    "M=D"
+                ]
+                instructions += index_instructions
+
+            pop_instructions = [
+                "@SP",
+                "AM=M-1",
+                "D=M",
+                "@R13",
+                "A=M",
+                "M=D"
+            ]
+            instructions += pop_instructions
 
         self._writeInstructions(instructions)
 
@@ -230,4 +256,7 @@ if __name__ == "__main__":
     code_writer.writePushPop(C_PUSH, "local", 5)
     code_writer.writePushPop(C_PUSH, "argument", 5)
     code_writer.writePushPop(C_PUSH, "constant", 24)
+    code_writer.writePushPop(C_POP, "argument", 5)
+    code_writer.writePushPop(C_POP, "local", 7)
+    code_writer.writePushPop(C_POP, "constant", 37)
     code_writer.close()
