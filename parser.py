@@ -63,6 +63,20 @@ class Parse:
                             self.instruction_type = C_PUSH
                         elif (tokens[0] == "pop"):
                             self.instruction_type = C_POP
+                        elif (tokens[0] == "call"):
+                            self.instruction_type = C_CALL
+                        elif (tokens[0] == "function"):
+                            self.instruction_type = C_FUNCTION
+                        elif (tokens[0] == "return"):
+                            self.instruction_type = C_RETURN
+                        elif (tokens[0] == "if-goto"):
+                            self.instruction_type = C_IF
+                        elif (tokens[0] == "goto"):
+                            self.instruction_type = C_GOTO
+                        elif (tokens[0] == "label"):
+                            self.instruction_type = C_LABEL
+                        elif (tokens[0] == "if-goto"):
+                            self.instruction_type = C_IF
 
                         return current_line
                     else:
