@@ -1,4 +1,6 @@
 push constant 100
+label ORCA
 push constant 200
 add
 pop static 0
+push static 0

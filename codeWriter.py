@@ -157,6 +157,16 @@ ARITHMETIC_TRANSLATIONS = {
             ],
 }
 
+init_instructions = [
+    "//Set up the stack pointer",
+    "@256",
+    "D=A",
+    "@SP",
+    "M=D",
+    "//@Main.main",
+    "//0;JMP"
+]
+
 
 class CodeWriter:
     def __init__(self, file_name : str = "vm.asm"):
@@ -168,6 +178,12 @@ class CodeWriter:
         for instruction in instructions:
             self.file.write(instruction + '\n')
             self.write_count += 1
+
+    def setFileName(self, file_name : str):
+        self.file_name = file_name
+
+    def writeInit(self):
+        self._writeInstructions(init_instructions)
 
     def writeArithmetic(self, operation : str):
         instructions = []
@@ -291,6 +307,34 @@ class CodeWriter:
             instructions += pop_instructions
 
         self._writeInstructions(instructions)
+
+    def writeLabel(self, label : str):
+        instructions = []
+        instructions.append("(" + label + ")")
+
+        self._writeInstructions(instructions)
+
+    def writeGoto(self, label : str):
+        goto_instructions = [
+            f"//Goto {label}",
+            f"@{label}",
+            "0;JMP"
+        ]
+
+        self._writeInstructions(goto_instructions)
+        
+    def writeIf(self, label : str):
+        if_goto_instructions = [
+            f"//If-Goto {label}",
+            "@SP",
+            "AM=A-1",
+            "D=M",
+            f"@{label}",
+            "D;JNE"
+        ]
+
+        self._writeInstructions(if_goto_instructions)
+        
 
     def close(self):
         self.file.close()
