@@ -75,8 +75,6 @@ class Parse:
                             self.instruction_type = C_GOTO
                         elif (tokens[0] == "label"):
                             self.instruction_type = C_LABEL
-                        elif (tokens[0] == "if-goto"):
-                            self.instruction_type = C_IF
 
                         return current_line
                     else:
@@ -99,7 +97,7 @@ class Parse:
 
     def getArgTwo(self) -> int:
         tokens = self.lines_list[self.index].split()
-        if (self.instruction_type == C_PUSH or self.instruction_type == C_POP):
+        if (self.instruction_type == C_PUSH or self.instruction_type == C_POP or self.instruction_type == C_FUNCTION or self.instruction_type == C_CALL):
             return int(tokens[2])
 
         return None

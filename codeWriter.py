@@ -163,16 +163,19 @@ init_instructions = [
     "D=A",
     "@SP",
     "M=D",
-    "//@Main.main",
-    "//0;JMP"
+    "@Main.main",
+    "0;JMP"
 ]
 
 
 class CodeWriter:
     def __init__(self, file_name : str = "vm.asm"):
         self.file_name = file_name
+        self.file_name = self.file_name.replace("/", "_")
         self.file = open(file_name, "w")
         self.write_count = 0
+        self.current_function = ""
+        self.call_count = 0
 
     def _writeInstructions(self, instructions : list[str]):
         for instruction in instructions:
@@ -180,6 +183,7 @@ class CodeWriter:
             self.write_count += 1
 
     def setFileName(self, file_name : str):
+        file_name = file_name.replace("/", "_")
         self.file_name = file_name
 
     def writeInit(self):
@@ -310,7 +314,7 @@ class CodeWriter:
 
     def writeLabel(self, label : str):
         instructions = []
-        instructions.append("(" + label + ")")
+        instructions.append(f"({self.current_function}${label})")
 
         self._writeInstructions(instructions)
 
@@ -334,7 +338,159 @@ class CodeWriter:
         ]
 
         self._writeInstructions(if_goto_instructions)
+
+    def writeFunction(self, function_name : str, nVars : int):
+        self.current_function = f"{self.file_name}.{function_name}"
+        function_instructions = [
+            f"//def Function {function_name}",
+            f"({self.current_function})"
+        ]
+
+        self._writeInstructions(function_instructions) 
+
+        for _ in range(nVars):
+            self.writePushPop(C_PUSH, "constant", "0")
         
+
+    def writeCall(self, function_name : str, nArgs : int):
+        function_label = f"{self.file_name}.{function_name}"
+        return_label = f"{self.current_function}$ret.{self.call_count}"
+        push_instructions = [
+            "@SP",
+            "A=M",
+            "M=D",
+            "@SP",
+            "M=M+1"
+        ]
+        
+        call_instructions = [
+            "// Push return address to stack",
+            f"@{return_label}",
+            "D=A",
+        ]
+        call_instructions += push_instructions
+        
+        call_instructions += [
+            "// push LCL",
+            "@LCL",
+            "D=M",
+        ]
+        call_instructions += push_instructions
+        
+        call_instructions += [
+            "// push ARG",
+            "@ARG",
+            "D=M",
+        ]
+        call_instructions += push_instructions
+        
+        call_instructions += [
+            "// push THIS",
+            "@THIS",
+            "D=M",
+        ]
+        call_instructions += push_instructions
+        
+        call_instructions += [
+            "// push THAT",
+            "@THAT",
+            "D=M",
+        ]
+        call_instructions += push_instructions
+        
+        arg_offset = 5 + nArgs
+        call_instructions += [
+            "// repostitions ARG",
+            f"@{arg_offset}",
+            "D=A",
+            "@SP",
+            "D=A-D",
+            "@ARG",
+            "M=D"
+        ]
+
+        call_instructions += [
+            "// repostitions LCL",
+            "@SP",
+            "D=M",
+            "@LCL",
+            "M=D"
+        ]
+
+        call_instructions += [
+            f"// Goto {function_label}",
+            f"@{function_label}",
+            "0;JMP"
+        ]
+
+        call_instructions += [
+            f"({return_label})"
+        ]
+
+        self.call_count += 1
+        self._writeInstructions(call_instructions) 
+    
+    def writeReturn(self):
+        return_instructions = [
+            "// Return",
+            "// Frame = LCL",
+            "@LCL",
+            "D=M",
+            "@R13",
+            "M=D",
+            "// RetAddr = *(frame - 5)"
+            "@5",
+            "D=M",
+            "@R13",
+            "D=M-D",
+            "@R14",
+            "M=D",
+            "// *ARG = pop()",
+            "@SP",
+            "A=A-1",
+            "D=M",
+            "@ARG",
+            "A=M",
+            "D=M",
+            "// SP = ARG+1",
+            "@ARG",
+            "D=A+1",
+            "@SP",
+            "M=D",
+            "// THAT = *(frame - 1)",
+            "@R13",
+            "AM=M-1",
+            "D=M",
+            "@THAT",
+            "M=D",
+            "// THIS = *(frame - 2)",
+            "@R13",
+            "AM=M-1",
+            "D=M",
+            "@THIS",
+            "M=D",
+            "// ARG = *(frame - 3)",
+            "@R13",
+            "AM=M-1",
+            "D=M",
+            "@ARG",
+            "M=D",
+            "// LCL = *(frame - 4)",
+            "@R13",
+            "AM=M-1",
+            "D=M",
+            "@LCL",
+            "M=D",
+            "// Goto return address",
+            "@R13",
+            "AM=M-1",
+            "A=M",
+            "0;JMP"
+        ]
+
+        self._writeInstructions(return_instructions) 
+
+        self.call_count = 0
 
     def close(self):
         self.file.close()

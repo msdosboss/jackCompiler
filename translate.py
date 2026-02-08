@@ -48,5 +48,14 @@ if (__name__ == "__main__"):
         elif (parser.instruction_type == C_IF):
             code_writer.writeIf(parser.getArgOne())
 
+        elif (parser.instruction_type == C_FUNCTION):
+            code_writer.writeFunction(parser.getArgOne(), parser.getArgTwo())
+
+        elif (parser.instruction_type == C_CALL):
+            code_writer.writeCall(parser.getArgOne(), parser.getArgTwo())
+
+        elif (parser.instruction_type == C_RETURN):
+            code_writer.writeReturn()
+
     code_writer.close()
 
