@@ -163,7 +163,7 @@ init_instructions = [
     "D=A",
     "@SP",
     "M=D",
-    "@Main.main",
+    "@Sys.init",
     "0;JMP"
 ]
 
@@ -172,6 +172,7 @@ class CodeWriter:
     def __init__(self, file_name : str = "vm.asm"):
         self.file_name = file_name
         self.file_name = self.file_name.replace("/", "_")
+        self.file_name = self.file_name.replace(".vm","")
         self.file = open(file_name, "w")
         self.write_count = 0
         self.current_function = ""
@@ -185,6 +186,7 @@ class CodeWriter:
     def setFileName(self, file_name : str):
         file_name = file_name.replace("/", "_")
         self.file_name = file_name
+        self.file_name = self.file_name.replace(".vm","")
 
     def writeInit(self):
         self._writeInstructions(init_instructions)
@@ -320,8 +322,8 @@ class CodeWriter:
 
     def writeGoto(self, label : str):
         goto_instructions = [
-            f"//Goto {label}",
-            f"@{label}",
+            f"//Goto {self.current_function}${label}",
+            f"@{self.current_function}${label}",
             "0;JMP"
         ]
 
@@ -329,18 +331,18 @@ class CodeWriter:
         
     def writeIf(self, label : str):
         if_goto_instructions = [
-            f"//If-Goto {label}",
+            f"//If-Goto {self.current_function}${label}",
             "@SP",
             "AM=A-1",
             "D=M",
-            f"@{label}",
+            f"@{self.current_function}${label}",
             "D;JNE"
         ]
 
         self._writeInstructions(if_goto_instructions)
 
     def writeFunction(self, function_name : str, nVars : int):
-        self.current_function = f"{self.file_name}.{function_name}"
+        self.current_function = f"{function_name}"
         function_instructions = [
             f"//def Function {function_name}",
             f"({self.current_function})"
@@ -353,7 +355,7 @@ class CodeWriter:
         
 
     def writeCall(self, function_name : str, nArgs : int):
-        function_label = f"{self.file_name}.{function_name}"
+        function_label = f"{function_name}"
         return_label = f"{self.current_function}$ret.{self.call_count}"
         push_instructions = [
             "@SP",

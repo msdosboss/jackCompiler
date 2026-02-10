@@ -44,41 +44,49 @@ class Parse:
                 current_line = self.lines_list[self.index]
                 # skipping comments and blank lines
                 # This is a bit fragile 
-                if(current_line[0] == '\n' or current_line[0] == '/'):
+                if(current_line[0] == '\n'):
                     continue
+                is_comment = False
+                j = 0
+                while(current_line[j] == ' ' or current_line[j] == '/' or current_line[j] == '\t'):
+                    if(current_line[j] == '/'):
+                        is_comment = True
+                    j += 1
+                if(is_comment):
+                    continue
+
+                # means we are at the end of the count
+                if (i + 1 == count):
+                    self.lines_list[self.index] = self.lines_list[self.index].replace("\n", "")
+                    # removes inline comments if they exist
+                    comment_index = self.lines_list[self.index].find('/')
+                    if (comment_index != -1):
+                        self.lines_list[self.index] = self.lines_list[self.index][:comment_index]
+
+                    tokens = self.lines_list[self.index].split()                 
+
+                    if (tokens[0] in ARITHEMTIC_INSTRUCTIONS):
+                        self.instruction_type = C_ARITHMETIC
+                    elif (tokens[0] == "push"):
+                        self.instruction_type = C_PUSH
+                    elif (tokens[0] == "pop"):
+                        self.instruction_type = C_POP
+                    elif (tokens[0] == "call"):
+                        self.instruction_type = C_CALL
+                    elif (tokens[0] == "function"):
+                        self.instruction_type = C_FUNCTION
+                    elif (tokens[0] == "return"):
+                        self.instruction_type = C_RETURN
+                    elif (tokens[0] == "if-goto"):
+                        self.instruction_type = C_IF
+                    elif (tokens[0] == "goto"):
+                        self.instruction_type = C_GOTO
+                    elif (tokens[0] == "label"):
+                        self.instruction_type = C_LABEL
+
+                    return current_line
                 else:
-                    # means we are at the end of the count
-                    if (i + 1 == count):
-                        self.lines_list[self.index] = self.lines_list[self.index].replace("\n", "")
-                        # removes inline comments if they exist
-                        comment_index = self.lines_list[self.index].find('/')
-                        if (comment_index != -1):
-                            self.lines_list[self.index] = self.lines_list[self.index][:comment_index]
-
-                        tokens = self.lines_list[self.index].split()                 
-
-                        if (tokens[0] in ARITHEMTIC_INSTRUCTIONS):
-                            self.instruction_type = C_ARITHMETIC
-                        elif (tokens[0] == "push"):
-                            self.instruction_type = C_PUSH
-                        elif (tokens[0] == "pop"):
-                            self.instruction_type = C_POP
-                        elif (tokens[0] == "call"):
-                            self.instruction_type = C_CALL
-                        elif (tokens[0] == "function"):
-                            self.instruction_type = C_FUNCTION
-                        elif (tokens[0] == "return"):
-                            self.instruction_type = C_RETURN
-                        elif (tokens[0] == "if-goto"):
-                            self.instruction_type = C_IF
-                        elif (tokens[0] == "goto"):
-                            self.instruction_type = C_GOTO
-                        elif (tokens[0] == "label"):
-                            self.instruction_type = C_LABEL
-
-                        return current_line
-                    else:
-                        continue
+                    continue
 
             # MegaMind meme goes here
             print("No lines?")
