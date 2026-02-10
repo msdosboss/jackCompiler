@@ -57,19 +57,15 @@ ARITHMETIC_TRANSLATIONS = {
                 "@TRUE",
                 "D;JEQ",
                 "(FALSE)",
-                "@0",
-                "D=A",
                 "@SP",
                 "A=M",
-                "M=D",
+                "M=0",
                 "@END",
                 "0;JMP",
                 "(TRUE)",
-                "@-1",
-                "D=A",
                 "@SP",
                 "A=M",
-                "M=D",
+                "M=-1",
                 "(END)",
                 "@SP",
                 "M=M+1"
@@ -84,19 +80,15 @@ ARITHMETIC_TRANSLATIONS = {
                 "@TRUE",
                 "D;JGE",
                 "(FALSE)",
-                "@0",
-                "D=A",
                 "@SP",
                 "A=M",
-                "M=D",
+                "M=0",
                 "@END",
                 "0;JMP",
                 "(TRUE)",
-                "@-1",
-                "D=A",
                 "@SP",
                 "A=M",
-                "M=D",
+                "M=-1",
                 "(END)",
                 "@SP",
                 "M=M+1"
@@ -111,19 +103,15 @@ ARITHMETIC_TRANSLATIONS = {
                 "@TRUE",
                 "D;JLT",
                 "(FALSE)",
-                "@0",
-                "D=A",
                 "@SP",
                 "A=M",
-                "M=D",
+                "M=0",
                 "@END",
                 "0;JMP",
                 "(TRUE)",
-                "@-1",
-                "D=A",
                 "@SP",
                 "A=M",
-                "M=D",
+                "M=-1",
                 "(END)",
                 "@SP",
                 "M=M+1"
@@ -198,11 +186,11 @@ class CodeWriter:
         if (operation == "lt" or operation == "gt" or operation == "eq"):
             # making labels unique
             for i, _ in enumerate(instructions):
-                if (instructions[i] == "(TRUE)"):
+                if ("TRUE" in instructions[i]):
                     instructions[i] = instructions[i].replace("TRUE", f"TRUE{int(self.write_count)}")
-                elif (instructions[i] == "(FALSE)"):
+                elif ("FALSE" in instructions[i]):
                     instructions[i] = instructions[i].replace("FALSE", f"FALSE{int(self.write_count)}")
-                elif (instructions[i] == "(END)"):
+                elif ("END" in instructions[i]):
                     instructions[i] = instructions[i].replace("END", f"END{int(self.write_count)}")
 
         self._writeInstructions(instructions)
@@ -333,7 +321,7 @@ class CodeWriter:
         if_goto_instructions = [
             f"//If-Goto {self.current_function}${label}",
             "@SP",
-            "AM=A-1",
+            "AM=M-1",
             "D=M",
             f"@{self.current_function}${label}",
             "D;JNE"
@@ -440,23 +428,24 @@ class CodeWriter:
             "D=M",
             "@R13",
             "M=D",
-            "// RetAddr = *(frame - 5)"
+            "// RetAddr = *(frame - 5)",
             "@5",
-            "D=M",
+            "D=A",
             "@R13",
-            "D=M-D",
+            "A=M-D",
+            "D=M",
             "@R14",
             "M=D",
             "// *ARG = pop()",
             "@SP",
-            "A=A-1",
+            "AM=M-1",
             "D=M",
             "@ARG",
             "A=M",
-            "D=M",
+            "M=D",
             "// SP = ARG+1",
             "@ARG",
-            "D=A+1",
+            "D=M+1",
             "@SP",
             "M=D",
             "// THAT = *(frame - 1)",
@@ -484,8 +473,7 @@ class CodeWriter:
             "@LCL",
             "M=D",
             "// Goto return address",
-            "@R13",
-            "AM=M-1",
+            "@R14",
             "A=M",
             "0;JMP"
         ]
