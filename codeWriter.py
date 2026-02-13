@@ -36,7 +36,7 @@ ARITHMETIC_TRANSLATIONS = {
                 "D=M",
                 "@SP",
                 "AM=M-1",
-                "M=D-M",
+                "M=M-D",
                 "@SP",
                 "M=M+1"
             ],
@@ -76,7 +76,7 @@ ARITHMETIC_TRANSLATIONS = {
                 "D=M",
                 "@SP",
                 "AM=M-1",
-                "D=D-M",
+                "D=M-D",
                 "@TRUE",
                 "D;JGE",
                 "(FALSE)",
@@ -99,7 +99,7 @@ ARITHMETIC_TRANSLATIONS = {
                 "D=M",
                 "@SP",
                 "AM=M-1",
-                "D=D-M",
+                "D=M-D",
                 "@TRUE",
                 "D;JLT",
                 "(FALSE)",
@@ -394,7 +394,7 @@ class CodeWriter:
             f"@{arg_offset}",
             "D=A",
             "@SP",
-            "D=A-D",
+            "D=M-D",
             "@ARG",
             "M=D"
         ]
