@@ -1,0 +1,47 @@
+class Main {
+    function void main() {
+        var BinaryTree tree;
+        var int i;
+        let i = 16;
+        do Output.printString("Hello Orca!");
+        do Output.println();
+        let tree = BinaryTree.new(null);
+
+        /*do tree.insert(14);
+        do tree.insert(100);
+        do tree.insert(3);
+        do tree.insert(5);
+        do tree.insert(8);
+        do tree.insert(21);
+        do tree.insert(69);
+        do tree.insert(53);
+        do tree.insert(35);*/
+
+        while(~(i = 0)){
+            do tree.insert(i);
+            let i = i - 1;
+        }
+
+        do tree.remove(5);
+        do tree.remove(7);
+        do Output.printInt(tree.remove(3));
+        do Output.println();
+        do Output.printInt(tree.remove(3));
+        do Output.println();
+
+        /*do tree.insert(1);
+        do tree.insert(2);
+        do tree.insert(3);
+        do tree.insert(4);
+        do tree.insert(5);
+        do tree.insert(6);
+        do tree.insert(7);
+        do tree.insert(8);
+        do tree.insert(9);*/
+
+        do tree.inorderRead();
+
+        do tree.dispose();
+        return;
+    }
+}
