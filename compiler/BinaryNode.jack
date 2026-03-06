@@ -1,0 +1,94 @@
+class BinaryNode {
+    field BinaryNode right, left;
+    field BinaryNode parent;
+    field int data;
+    field int height;
+
+    constructor BinaryNode new(BinaryNode right_child, BinaryNode left_child, BinaryNode new_parent, int new_data){
+        let right = right_child;
+        let left = left_child;
+        let parent = new_parent;
+        let data = new_data;
+        let height = 0;
+
+        return this;
+    }
+
+    method void updateHeight(){
+        var int left_height, right_height;
+        let left_height = -1;
+        let right_height = -1;
+
+        if(~(left = null)){
+            let left_height = left.getHeight();
+        }
+        if(~(right = null)){
+            let right_height = right.getHeight();
+        }
+
+        do setHeight(Math.max(left_height, right_height) + 1);
+        return;
+    }
+    // left heavy is + right heavy is -
+    method int getBalance(){
+        var int left_height, right_height;
+
+        let left_height = -1;
+        if(~(left = null)){
+            let left_height = left.getHeight();
+        }
+        let right_height = -1;
+        if(~(right = null)){
+            let right_height = right.getHeight();
+        }
+
+        return (left_height - right_height);
+    }
+
+    method BinaryNode getRight() {
+        return right;
+    }
+    method BinaryNode getLeft() {
+        return left;
+    }
+    method BinaryNode getParent() {
+        return parent;
+    }
+    method int getData() {
+        return data;
+    }
+    method int getHeight() {
+        return height;
+    }
+    method void setRight(BinaryNode node){
+        let right = node;
+        if(~(node = null)){
+            do node.setParent(this);
+        }
+        return;
+    }
+    method void setLeft(BinaryNode node){
+        let left = node;
+        if(~(node = null)){
+            do node.setParent(this);
+        }
+        return;
+    }
+    method void setParent(BinaryNode node){
+        let parent = node;
+        return;
+    }
+    method void setData(int value){
+        let data = value;
+        return;
+    }
+    method void setHeight(int value){
+        let height = value;
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+}

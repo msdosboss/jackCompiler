@@ -205,7 +205,6 @@ class Tokenizer:
     def keyWord(self) -> int:
         if(self.tokenType() == KEYWORD):
             return keyword_dict[self.current_token]
-        print("calling keyWord when type is not KEYWORD")
         return -1
 
     def symbol(self) -> str:

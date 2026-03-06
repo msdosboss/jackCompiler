@@ -3,5 +3,12 @@
   <identifier> Main </identifier>
   <symbol> { </symbol>
   <subroutineDec>
+    <keyword> function </keyword>
+    <keyword> void </keyword>
+    <identifier> main </identifier>
+    <symbol> ( </symbol>
+    <symbol> ) </symbol>
+    <subroutineBody>
+    </subroutineBody>
   </subroutineDec>
 </class>

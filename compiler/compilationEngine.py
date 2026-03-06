@@ -10,6 +10,10 @@ from tokenizer import FUNCTION
 from tokenizer import CONSTRUCTOR
 from tokenizer import STATIC
 from tokenizer import FIELD
+from tokenizer import INT
+from tokenizer import CHAR
+from tokenizer import BOOLEAN
+from tokenizer import VOID
 from tokenizer import keyword_dict
 
 reverse_keyword_dict = {value: key for key, value in keyword_dict.items()}
@@ -88,12 +92,51 @@ class CompilationEngine:
         self.output_file.close()
         
 
-        
+    def _compileVarGeneral(self):
+        current_key_word = self.tokenizer.keyWord()
+        if(current_key_word != INT and current_key_word != BOOLEAN and current_key_word != CHAR and self.tokenizer.tokenType() != IDENTIFIER):
+            print(f"Non-valid type token for class var declaration got {self.tokenizer.current_token}")
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        if(self.tokenizer.tokenType() != IDENTIFIER):
+            self._printError(token_type_dict[IDENTIFIER], token_type_dict[self.tokenizer.tokenType()])
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        while(self.tokenizer.current_token == ','):
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+            if(self.tokenizer.tokenType() != IDENTIFIER):
+                self._printError(token_type_dict[IDENTIFIER], token_type_dict[self.tokenizer.tokenType()])
+                return
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+
+
     def compileClassVarDec(self):
         self._writeTab()
         self.output_file.write("<classVarDec>\n")
         self.tab_count += 1
 
+        # don't need to verify the first token becuase if this the token is either static or field
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+        
+        current_key_word = self.tokenizer.keyWord()
+        if(current_key_word != INT and current_key_word != BOOLEAN and current_key_word != CHAR and self.tokenizer.tokenType() != IDENTIFIER):
+            print(f"Non-valid type token for class var declaration got {self.tokenizer.current_token}")
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+
+        self._compileVarGeneral()
+
+        if(self.tokenizer.current_token != ';'):
+            self._printError(';', self.tokenizer.current_token)
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
 
         self.tab_count -= 1
@@ -106,7 +149,43 @@ class CompilationEngine:
         self.output_file.write("<subroutineDec>\n")
         self.tab_count += 1
 
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
+
+        key_word = self.tokenizer.keyWord()
+        if(key_word != INT and key_word != CHAR and key_word != BOOLEAN and key_word != VOID and self.tokenizer.tokenType() != IDENTIFIER):
+            print(f"Non-valid type token for subroutine declaration got {self.tokenizer.current_token}")
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        if(self.tokenizer.tokenType() != IDENTIFIER):
+            self._printError(token_type_dict[IDENTIFIER], token_type_dict[self.tokenizer.tokenType()])
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        if(self.tokenizer.current_token != '('):
+            self._printError('(', self.tokenizer.current_token)
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        key_word = self.tokenizer.keyWord()
+        if(key_word == INT or key_word == CHAR or key_word == BOOLEAN or self.tokenizer.tokenType() == IDENTIFIER):
+            self.compileParameterList()
+    
+
+        if(self.tokenizer.current_token != ')'):
+            self._printError(')', self.tokenizer.current_token)
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        if(self.tokenizer.current_token != '{'):
+            self._printError('{', self.tokenizer.current_token)
+            return
+        self.compileSubroutineBody()
 
         self.tab_count -= 1
         self._writeTab()
@@ -116,6 +195,38 @@ class CompilationEngine:
         self._writeTab()
         self.output_file.write("<parameterList>\n")
         self.tab_count += 1
+
+        current_key_word = self.tokenizer.keyWord()
+        if(current_key_word != INT and current_key_word != BOOLEAN and current_key_word != CHAR and self.tokenizer.tokenType() != IDENTIFIER):
+            print(f"Non-valid type token for class var declaration got {self.tokenizer.current_token}")
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        if(self.tokenizer.tokenType() != IDENTIFIER):
+            self._printError(token_type_dict[IDENTIFIER], token_type_dict[self.tokenizer.tokenType()])
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        while(self.tokenizer.current_token == ','):
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+            current_key_word = self.tokenizer.keyWord()
+            if(current_key_word != INT and current_key_word != BOOLEAN and current_key_word != CHAR and self.tokenizer.tokenType() != IDENTIFIER):
+                print(f"Non-valid type token for class var declaration got {self.tokenizer.current_token}")
+                return
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+            if(self.tokenizer.tokenType() != IDENTIFIER):
+
+                self._printError(token_type_dict[IDENTIFIER], token_type_dict[self.tokenizer.tokenType()])
+                return
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+
+
+
 
 
         self.tab_count -= 1
@@ -136,7 +247,11 @@ class CompilationEngine:
         self._writeTab()
         self.output_file.write("<varDec>\n")
         self.tab_count += 1
-
+        
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+        
+        self._compileVarGeneral()
 
         self.tab_count -= 1
         self._writeTab()

@@ -1,0 +1,13 @@
+<class>
+  <keyword> class </keyword>
+  <identifier> BinaryTree </identifier>
+  <symbol> { </symbol>
+  <classVarDec>
+    <keyword> field </keyword>
+    <identifier> BinaryNode </identifier>
+    <identifier> root </identifier>
+    <symbol> ; </symbol>
+  </classVarDec>
+  <subroutineDec>
+  </subroutineDec>
+</class>

@@ -1,0 +1,57 @@
+<class>
+  <keyword> class </keyword>
+  <identifier> BinaryNode </identifier>
+  <symbol> { </symbol>
+  <classVarDec>
+    <keyword> field </keyword>
+    <identifier> BinaryNode </identifier>
+    <identifier> BinaryNode </identifier>
+    <identifier> right </identifier>
+    <symbol> , </symbol>
+    <identifier> left </identifier>
+    <symbol> ; </symbol>
+  </classVarDec>
+  <classVarDec>
+    <keyword> field </keyword>
+    <identifier> BinaryNode </identifier>
+    <identifier> BinaryNode </identifier>
+    <identifier> parent </identifier>
+    <symbol> ; </symbol>
+  </classVarDec>
+  <classVarDec>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
+    <keyword> int </keyword>
+    <identifier> data </identifier>
+    <symbol> ; </symbol>
+  </classVarDec>
+  <classVarDec>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
+    <keyword> int </keyword>
+    <identifier> height </identifier>
+    <symbol> ; </symbol>
+  </classVarDec>
+  <subroutineDec>
+    <keyword> constructor </keyword>
+    <identifier> BinaryNode </identifier>
+    <identifier> new </identifier>
+    <symbol> ( </symbol>
+    <parameterList>
+      <identifier> BinaryNode </identifier>
+      <identifier> right_child </identifier>
+      <symbol> , </symbol>
+      <identifier> BinaryNode </identifier>
+      <identifier> left_child </identifier>
+      <symbol> , </symbol>
+      <identifier> BinaryNode </identifier>
+      <identifier> new_parent </identifier>
+      <symbol> , </symbol>
+      <keyword> int </keyword>
+      <identifier> new_data </identifier>
+    </parameterList>
+    <symbol> ) </symbol>
+    <subroutineBody>
+    </subroutineBody>
+  </subroutineDec>
+</class>

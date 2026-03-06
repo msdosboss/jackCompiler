@@ -1,0 +1,310 @@
+class BinaryTree {
+    field BinaryNode root;
+
+    constructor BinaryTree new(BinaryNode new_root){
+        let root = new_root;
+        return this;
+    }
+
+    method bool remove(int value){
+        if(~(root = null)){
+            return removeHelper(root, value);
+        }
+        return false;
+    }
+
+    method bool removeHelper(BinaryNode current, int value){
+        var BinaryNode left_node, right_node;
+        if(current.getData() = value){
+            do removeNode(current);
+            return true;
+        }
+        let left_node = current.getLeft();
+        let right_node = current.getRight();
+
+        if(current.getData() < value){
+            if(~(right_node = null)){
+                return removeHelper(right_node, value);
+            }
+        }
+        else{
+            if(~(left_node = null)){
+                return removeHelper(left_node, value);
+            }
+        }
+        
+        return false;
+    }
+
+    method void removeNode(BinaryNode node_to_remove){
+        var BinaryNode successor_node, parent; 
+        var bool is_left_of_parent;
+
+        let parent = node_to_remove.getParent();
+
+        // Internal node with 2 children
+        if((~(node_to_remove.getLeft() = null)) & (~(node_to_remove.getRight() = null))){
+            let successor_node = node_to_remove.getRight();
+            while(~(successor_node.getLeft() = null)){
+                let successor_node = successor_node.getLeft();
+            }
+            do node_to_remove.setData(successor_node.getData());
+
+            do removeNode(successor_node);
+        }
+        else{
+            let successor_node = node_to_remove;
+            // Root node with 1 or 0 children
+            if(node_to_remove = root){
+                if(~(root.getLeft() = null)){
+                    let root = root.getLeft();
+                }
+                else{
+                    let root = root.getRight();
+                }
+                if(~(root = null)){
+                    do root.setParent(null);
+                }
+            }
+            else{
+                let is_left_of_parent = (parent.getData() > node_to_remove.getData()); 
+                // Internal node with left_child only
+                if(~(node_to_remove.getLeft() = null)){
+                    if(is_left_of_parent){
+                        do parent.setLeft(node_to_remove.getLeft());
+                    }
+                    else{
+                        do parent.setRight(node_to_remove.getLeft());
+                    }
+                }
+                // Internal with right_child or leaf
+                else{
+                    if(is_left_of_parent){
+                        do parent.setLeft(node_to_remove.getRight());
+                    }
+                    else{
+                        do parent.setRight(node_to_remove.getRight());
+                    }
+
+                }
+            }
+            do successor_node.dispose();
+        }
+
+        // Rebalancing up the parent chain
+        let successor_node = parent;
+        while(~(successor_node = null)){
+            do rebalnce(successor_node);
+            do successor_node.updateHeight();
+            let successor_node = successor_node.getParent();
+        }
+
+        return;
+        
+    }
+
+    method void insert(int value){
+        if (~(root = null)){
+            do insertHelper(root, value);
+        }
+        else{
+            let root = BinaryNode.new(null, null, null, value);
+        }
+        return;
+    }
+
+    method void insertHelper(BinaryNode current, int value){
+        var BinaryNode left_node, right_node, new_node;
+        var int current_value, left_height, right_height;
+        let left_height = -1;
+        let right_height = -1;
+        let left_node = current.getLeft();
+        let right_node = current.getRight();
+
+        let current_value = current.getData();
+        if((current_value > value) | (current_value = value)){
+            // left does not equal null 
+            if(~(left_node = null)){
+                do insertHelper(left_node, value);
+            }
+            else{
+                let new_node = BinaryNode.new(null, null, current, value);
+                do current.setLeft(new_node);
+                let left_node = new_node;
+            }
+            
+        }
+        else{
+            // left does not equal null 
+            if(~(right_node = null)){
+                do insertHelper(right_node, value);
+            }
+            else{
+                let new_node = BinaryNode.new(null, null, current, value);
+                do current.setRight(new_node);
+                let right_node = new_node;
+            }
+            
+        }
+
+        do current.updateHeight();
+
+        do rebalnce(current);
+
+        return;
+    }
+
+    method void rebalnce(BinaryNode current){
+        var BinaryNode left_node, right_node;
+        let left_node = current.getLeft();
+        let right_node = current.getRight();
+
+        // Right heavy
+        if(current.getBalance() = -2){
+            //RL
+            if(right_node.getBalance() > 0){
+                do LLShift(right_node);
+                do RRShift(current);
+            }
+            //RR
+            else{
+                do RRShift(current);
+            }
+        }
+        // Left heavy
+        if(current.getBalance() = 2){
+            //LR
+            if(left_node.getBalance() < 0){
+                do RRShift(left_node);
+                do LLShift(current);
+            }
+            //LL
+            else{
+                do LLShift(current);
+            }
+        }
+
+        return;
+
+    }
+
+    method void LLShift(BinaryNode current){
+        var BinaryNode parent, left_child;
+        var bool is_left_of_parent;
+        let parent = current.getParent();
+        let left_child = current.getLeft();
+
+
+        do current.setLeft(left_child.getRight());
+        do left_child.setRight(current);
+
+        do current.updateHeight();
+        do left_child.updateHeight();
+
+        if(~(parent = null)){
+            let is_left_of_parent = (parent.getData() > current.getData()); 
+            if(is_left_of_parent){
+                do parent.setLeft(left_child);
+            }
+            else{
+                do parent.setRight(left_child);
+            }
+        }
+        else{
+            let root = left_child;
+            do left_child.setParent(null);
+        }
+
+        return;
+    }
+
+    method void RRShift(BinaryNode current){
+        var BinaryNode parent, right_child;
+        var bool is_left_of_parent;
+        let parent = current.getParent();
+        let right_child = current.getRight();
+
+        do current.setRight(right_child.getLeft());
+        do right_child.setLeft(current);
+        do current.updateHeight();
+        do right_child.updateHeight();
+
+        if(~(parent = null)){
+            let is_left_of_parent = (parent.getData() > current.getData());
+            if(is_left_of_parent){
+                do parent.setLeft(right_child);
+            }
+            else{
+                do parent.setRight(right_child);
+            }
+        }
+        else{
+            let root = right_child;
+            do right_child.setParent(null);
+        }
+        return;
+    }
+
+    method void inorderRead(){
+        if(~(root=null)){
+            do inorderReadHelper(root);
+            do Output.println();
+        }
+        else{
+            do Output.printString("Tree is empty");
+            do Output.println();
+        }
+        return;
+    }
+
+    method void inorderReadHelper(BinaryNode current){
+        var BinaryNode left_node, right_node;
+        var int current_value, current_height, current_balance;
+        let left_node = current.getLeft();
+        let right_node = current.getRight();
+
+        let current_value = current.getData();
+        let current_height = current.getHeight();
+        let current_balance = current.getBalance();
+        if(~(left_node = null)){
+            do inorderReadHelper(left_node);
+        }
+        do Output.printInt(current_value);
+        do Output.printString(" ");
+        do Output.printInt(current_height);
+        do Output.printString(" ");
+        do Output.printInt(current_balance);
+        do Output.printString(" ");
+        do Output.println();
+        if(~(right_node = null)){
+            do inorderReadHelper(right_node);
+        }
+        return;
+    }
+
+    method void dispose(){
+        if(~(root = null)){
+            do disposeHelper(root);
+        }
+        do Memory.deAlloc(this);
+
+        return;
+        
+    }
+
+    method void disposeHelper(BinaryNode current){
+        var BinaryNode left_node, right_node;
+        let left_node = current.getLeft();
+        let right_node = current.getRight();
+
+        if(~(left_node = null)){
+            do disposeHelper(left_node);
+        }
+        if(~(right_node = null)){
+            do disposeHelper(right_node);
+        }
+        
+        do current.dispose();
+        return;
+    }
+}
