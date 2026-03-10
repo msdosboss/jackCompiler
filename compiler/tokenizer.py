@@ -92,9 +92,6 @@ class Tokenizer:
         for i, _ in enumerate(self.file_text):
             self.file_text[i] = self.file_text[i].replace('\n', '')
 
-        # removes empty strings from list
-        self.file_text = [line for line in self.file_text if line]
-
         self.current_char = self.file_text[0][0]
 
 
@@ -117,6 +114,10 @@ class Tokenizer:
         if(self.str_index >= len(self.file_text[self.line_index])):
            self.line_index += 1
            self.str_index = 0
+
+        # added this to keep track of line count
+        while(len(self.file_text[self.line_index]) == 0):
+            self.line_index += 1
 
         if(self.line_index >= len(self.file_text)):
             self.current_char = ' '
@@ -231,3 +232,5 @@ class Tokenizer:
         print("calling stringVal when type is not STRING_CONST")
         return None
 
+    def lineCount(self) -> int:
+        return self.line_index + 1

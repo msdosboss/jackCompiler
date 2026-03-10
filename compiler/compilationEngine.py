@@ -14,6 +14,12 @@ from tokenizer import INT
 from tokenizer import CHAR
 from tokenizer import BOOLEAN
 from tokenizer import VOID
+from tokenizer import VAR
+from tokenizer import DO
+from tokenizer import LET
+from tokenizer import IF
+from tokenizer import WHILE
+from tokenizer import RETURN
 from tokenizer import keyword_dict
 
 reverse_keyword_dict = {value: key for key, value in keyword_dict.items()}
@@ -27,11 +33,19 @@ token_type_dict = {
     STRING_CONST : "stringConstant"
 }
 
+
 class CompilationEngine:
     def __init__(self, tokenizer : Tokenizer, output_file_name : str):
         self.tokenizer = tokenizer
         self.output_file = open(output_file_name, "w")
         self.tab_count = 0
+        self.statement_method_dict = {
+            DO : self.compileDo,
+            LET : self.compileLet,
+            IF : self.compileIf,
+            WHILE : self.compileWhile,
+            RETURN : self.compileReturn
+        }       
 
 
     def _writeTab(self):
@@ -91,6 +105,8 @@ class CompilationEngine:
         self.output_file.write("</class>")
         self.output_file.close()
         
+    def _indentifierCheck(self):
+        pass
 
     def _compileVarGeneral(self):
         current_key_word = self.tokenizer.keyWord()
@@ -129,8 +145,6 @@ class CompilationEngine:
         if(current_key_word != INT and current_key_word != BOOLEAN and current_key_word != CHAR and self.tokenizer.tokenType() != IDENTIFIER):
             print(f"Non-valid type token for class var declaration got {self.tokenizer.current_token}")
             return
-        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
-
         self._compileVarGeneral()
 
         if(self.tokenizer.current_token != ';'):
@@ -219,7 +233,6 @@ class CompilationEngine:
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
             if(self.tokenizer.tokenType() != IDENTIFIER):
-
                 self._printError(token_type_dict[IDENTIFIER], token_type_dict[self.tokenizer.tokenType()])
                 return
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
@@ -238,6 +251,29 @@ class CompilationEngine:
         self.output_file.write("<subroutineBody>\n")
         self.tab_count += 1
 
+        # This method assumes the first token is correct
+        # Since it's checked by it's caller
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
+
+        while(self.tokenizer.keyWord() == VAR):
+            self.compileVarDec()
+        
+        if(   self.tokenizer.keyWord() !=    LET and
+              self.tokenizer.keyWord() !=     IF and
+              self.tokenizer.keyWord() !=  WHILE and
+              self.tokenizer.keyWord() !=     DO and
+              self.tokenizer.keyWord() != RETURN):
+            print(f"excpected statement token but instead got {self.tokenizer.current_token}")
+            return
+        
+        self.compileStatements()
+
+        '''if(self.tokenizer.symbol() != '}'):
+            self._printError('}', self.tokenizer.current_token)
+            return
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)'''
+        self.tokenizer.advance()
 
         self.tab_count -= 1
         self._writeTab()
@@ -262,6 +298,13 @@ class CompilationEngine:
         self.output_file.write("<statements>\n")
         self.tab_count += 1
 
+        while(self.tokenizer.keyWord() ==    LET or
+              self.tokenizer.keyWord() ==     IF or
+              self.tokenizer.keyWord() ==  WHILE or
+              self.tokenizer.keyWord() ==     DO or
+              self.tokenizer.keyWord() == RETURN):
+            self.statement_method_dict[self.tokenizer.keyWord()]()
+        
 
         self.tab_count -= 1
         self._writeTab()
@@ -272,6 +315,8 @@ class CompilationEngine:
         self.output_file.write("<letStatement>\n")
         self.tab_count += 1
 
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
 
         self.tab_count -= 1
         self._writeTab()
@@ -282,6 +327,8 @@ class CompilationEngine:
         self.output_file.write("<ifStatement>\n")
         self.tab_count += 1
 
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
 
         self.tab_count -= 1
         self._writeTab()
@@ -292,6 +339,8 @@ class CompilationEngine:
         self.output_file.write("<whileStatement>\n")
         self.tab_count += 1
 
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
 
         self.tab_count -= 1
         self._writeTab()
@@ -302,6 +351,8 @@ class CompilationEngine:
         self.output_file.write("<doStatement>\n")
         self.tab_count += 1
 
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
 
         self.tab_count -= 1
         self._writeTab()
@@ -312,6 +363,8 @@ class CompilationEngine:
         self.output_file.write("<returnStatement>\n")
         self.tab_count += 1
 
+        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        self.tokenizer.advance()
 
         self.tab_count -= 1
         self._writeTab()
