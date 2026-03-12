@@ -26,3 +26,871 @@
     <keyword> field </keyword>
     <keyword> int </keyword>
     <identifier> height </identifier>
+    <symbol> ; </symbol>
+  </classVarDec>
+  <subroutineDec>
+    <keyword> constructor </keyword>
+    <identifier> BinaryNode </identifier>
+    <identifier> new </identifier>
+    <symbol> ( </symbol>
+    <parameterList>
+      <identifier> BinaryNode </identifier>
+      <identifier> right_child </identifier>
+      <symbol> , </symbol>
+      <identifier> BinaryNode </identifier>
+      <identifier> left_child </identifier>
+      <symbol> , </symbol>
+      <identifier> BinaryNode </identifier>
+      <identifier> new_parent </identifier>
+      <symbol> , </symbol>
+      <keyword> int </keyword>
+      <identifier> new_data </identifier>
+    </parameterList>
+    <symbol> ) </symbol>
+    <subroutineBody>
+      <symbol> { </symbol>
+      <statements>
+        <letStatement>
+          <keyword> let </keyword>
+          <identifier> right </identifier>
+          <symbol> = </symbol>
+          <expression>
+            <term>
+              <identifier> right_child </identifier>
+            </term>
+          </expression>
+          <symbol> ; </symbol>
+        </letStatement>
+        <letStatement>
+          <keyword> let </keyword>
+          <identifier> left </identifier>
+          <symbol> = </symbol>
+          <expression>
+            <term>
+              <identifier> left_child </identifier>
+            </term>
+          </expression>
+          <symbol> ; </symbol>
+        </letStatement>
+        <letStatement>
+          <keyword> let </keyword>
+          <identifier> parent </identifier>
+          <symbol> = </symbol>
+          <expression>
+            <term>
+              <identifier> new_parent </identifier>
+            </term>
+          </expression>
+          <symbol> ; </symbol>
+        </letStatement>
+        <letStatement>
+          <keyword> let </keyword>
+          <identifier> data </identifier>
+          <symbol> = </symbol>
+          <expression>
+            <term>
+              <identifier> new_data </identifier>
+            </term>
+          </expression>
+          <symbol> ; </symbol>
+        </letStatement>
+        <letStatement>
+          <keyword> let </keyword>
+          <identifier> height </identifier>
+          <symbol> = </symbol>
+          <expression>
+            <term>
+              <integerConstant> 0 </integerConstant>
+            </term>
+          </expression>
+          <symbol> ; </symbol>
+        </letStatement>
+        <returnStatement>
+          <keyword> return </keyword>
+          <expression>
+            <term>
+              <keyword> this </keyword>
+            </term>
+          </expression>
+          <symbol> ; </symbol>
+        </returnStatement>
+      </statements>
+      <symbol> } </symbol>
+    </subroutineBody>
+  </subroutineDec>
+  <subroutineDec>
+    <keyword> method </keyword>
+    <keyword> void </keyword>
+    <identifier> updateHeight </identifier>
+    <symbol> ( </symbol>
+    <parameterList>
+      <symbol> ) </symbol>
+      <subroutineBody>
+        <symbol> { </symbol>
+        <varDec>
+          <keyword> var </keyword>
+          <keyword> int </keyword>
+          <identifier> left_height </identifier>
+          <symbol> , </symbol>
+          <identifier> right_height </identifier>
+          <symbol> ; </symbol>
+        </varDec>
+        <statements>
+          <letStatement>
+            <keyword> let </keyword>
+            <identifier> left_height </identifier>
+            <symbol> = </symbol>
+            <expression>
+              <term>
+                <symbol> - </symbol>
+                <term>
+                  <integerConstant> 1 </integerConstant>
+                </term>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </letStatement>
+          <letStatement>
+            <keyword> let </keyword>
+            <identifier> right_height </identifier>
+            <symbol> = </symbol>
+            <expression>
+              <term>
+                <symbol> - </symbol>
+                <term>
+                  <integerConstant> 1 </integerConstant>
+                </term>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </letStatement>
+          <ifStatement>
+            <keyword> if </keyword>
+            <symbol> ( </symbol>
+            <expression>
+              <term>
+                <symbol> ~ </symbol>
+                <term>
+                  <symbol> ( </symbol>
+                  <expressionList>
+                    <expression>
+                      <term>
+                        <identifier> left </identifier>
+                      </term>
+                      <symbol> = </symbol>
+                      <term>
+                        <keyword> null </keyword>
+                      </term>
+                    </expression>
+                  </expressionList>
+                  <symbol> ) </symbol>
+                </term>
+              </term>
+            </expression>
+            <symbol> ) </symbol>
+            <symbol> { </symbol>
+            <statements>
+              <letStatement>
+                <keyword> let </keyword>
+                <identifier> left_height </identifier>
+                <symbol> = </symbol>
+                <expression>
+                  <term>
+                    <identifier> left </identifier>
+                    <symbol> . </symbol>
+                    <identifier> getHeight </identifier>
+                    <symbol> ( </symbol>
+                    <expressionList>
+                      <expression>
+                        <term>
+                        </term>
+                      </expression>
+                    </expressionList>
+                    <symbol> ) </symbol>
+                  </term>
+                </expression>
+                <symbol> ; </symbol>
+              </letStatement>
+            </statements>
+            <symbol> } </symbol>
+          </ifStatement>
+          <ifStatement>
+            <keyword> if </keyword>
+            <symbol> ( </symbol>
+            <expression>
+              <term>
+                <symbol> ~ </symbol>
+                <term>
+                  <symbol> ( </symbol>
+                  <expressionList>
+                    <expression>
+                      <term>
+                        <identifier> right </identifier>
+                      </term>
+                      <symbol> = </symbol>
+                      <term>
+                        <keyword> null </keyword>
+                      </term>
+                    </expression>
+                  </expressionList>
+                  <symbol> ) </symbol>
+                </term>
+              </term>
+            </expression>
+            <symbol> ) </symbol>
+            <symbol> { </symbol>
+            <statements>
+              <letStatement>
+                <keyword> let </keyword>
+                <identifier> right_height </identifier>
+                <symbol> = </symbol>
+                <expression>
+                  <term>
+                    <identifier> right </identifier>
+                    <symbol> . </symbol>
+                    <identifier> getHeight </identifier>
+                    <symbol> ( </symbol>
+                    <expressionList>
+                      <expression>
+                        <term>
+                        </term>
+                      </expression>
+                    </expressionList>
+                    <symbol> ) </symbol>
+                  </term>
+                </expression>
+                <symbol> ; </symbol>
+              </letStatement>
+            </statements>
+            <symbol> } </symbol>
+          </ifStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> setHeight </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <identifier> Math </identifier>
+                      <symbol> . </symbol>
+                      <identifier> max </identifier>
+                      <symbol> ( </symbol>
+                      <expressionList>
+                        <expression>
+                          <term>
+                            <identifier> left_height </identifier>
+                          </term>
+                        </expression>
+                        <symbol> , </symbol>
+                        <expression>
+                          <term>
+                            <identifier> right_height </identifier>
+                          </term>
+                        </expression>
+                      </expressionList>
+                      <symbol> ) </symbol>
+                    </term>
+                    <symbol> + </symbol>
+                    <term>
+                      <integerConstant> 1 </integerConstant>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <returnStatement>
+            <keyword> return </keyword>
+            <symbol> ; </symbol>
+          </returnStatement>
+        </statements>
+        <symbol> } </symbol>
+      </subroutineBody>
+    </subroutineDec>
+    <subroutineDec>
+      <keyword> method </keyword>
+      <keyword> int </keyword>
+      <identifier> getBalance </identifier>
+      <symbol> ( </symbol>
+      <parameterList>
+        <symbol> ) </symbol>
+        <subroutineBody>
+          <symbol> { </symbol>
+          <varDec>
+            <keyword> var </keyword>
+            <keyword> int </keyword>
+            <identifier> left_height </identifier>
+            <symbol> , </symbol>
+            <identifier> right_height </identifier>
+            <symbol> ; </symbol>
+          </varDec>
+          <statements>
+            <letStatement>
+              <keyword> let </keyword>
+              <identifier> left_height </identifier>
+              <symbol> = </symbol>
+              <expression>
+                <term>
+                  <symbol> - </symbol>
+                  <term>
+                    <integerConstant> 1 </integerConstant>
+                  </term>
+                </term>
+              </expression>
+              <symbol> ; </symbol>
+            </letStatement>
+            <ifStatement>
+              <keyword> if </keyword>
+              <symbol> ( </symbol>
+              <expression>
+                <term>
+                  <symbol> ~ </symbol>
+                  <term>
+                    <symbol> ( </symbol>
+                    <expressionList>
+                      <expression>
+                        <term>
+                          <identifier> left </identifier>
+                        </term>
+                        <symbol> = </symbol>
+                        <term>
+                          <keyword> null </keyword>
+                        </term>
+                      </expression>
+                    </expressionList>
+                    <symbol> ) </symbol>
+                  </term>
+                </term>
+              </expression>
+              <symbol> ) </symbol>
+              <symbol> { </symbol>
+              <statements>
+                <letStatement>
+                  <keyword> let </keyword>
+                  <identifier> left_height </identifier>
+                  <symbol> = </symbol>
+                  <expression>
+                    <term>
+                      <identifier> left </identifier>
+                      <symbol> . </symbol>
+                      <identifier> getHeight </identifier>
+                      <symbol> ( </symbol>
+                      <expressionList>
+                        <expression>
+                          <term>
+                          </term>
+                        </expression>
+                      </expressionList>
+                      <symbol> ) </symbol>
+                    </term>
+                  </expression>
+                  <symbol> ; </symbol>
+                </letStatement>
+              </statements>
+              <symbol> } </symbol>
+            </ifStatement>
+            <letStatement>
+              <keyword> let </keyword>
+              <identifier> right_height </identifier>
+              <symbol> = </symbol>
+              <expression>
+                <term>
+                  <symbol> - </symbol>
+                  <term>
+                    <integerConstant> 1 </integerConstant>
+                  </term>
+                </term>
+              </expression>
+              <symbol> ; </symbol>
+            </letStatement>
+            <ifStatement>
+              <keyword> if </keyword>
+              <symbol> ( </symbol>
+              <expression>
+                <term>
+                  <symbol> ~ </symbol>
+                  <term>
+                    <symbol> ( </symbol>
+                    <expressionList>
+                      <expression>
+                        <term>
+                          <identifier> right </identifier>
+                        </term>
+                        <symbol> = </symbol>
+                        <term>
+                          <keyword> null </keyword>
+                        </term>
+                      </expression>
+                    </expressionList>
+                    <symbol> ) </symbol>
+                  </term>
+                </term>
+              </expression>
+              <symbol> ) </symbol>
+              <symbol> { </symbol>
+              <statements>
+                <letStatement>
+                  <keyword> let </keyword>
+                  <identifier> right_height </identifier>
+                  <symbol> = </symbol>
+                  <expression>
+                    <term>
+                      <identifier> right </identifier>
+                      <symbol> . </symbol>
+                      <identifier> getHeight </identifier>
+                      <symbol> ( </symbol>
+                      <expressionList>
+                        <expression>
+                          <term>
+                          </term>
+                        </expression>
+                      </expressionList>
+                      <symbol> ) </symbol>
+                    </term>
+                  </expression>
+                  <symbol> ; </symbol>
+                </letStatement>
+              </statements>
+              <symbol> } </symbol>
+            </ifStatement>
+            <returnStatement>
+              <keyword> return </keyword>
+              <expression>
+                <term>
+                  <symbol> ( </symbol>
+                  <expressionList>
+                    <expression>
+                      <term>
+                        <identifier> left_height </identifier>
+                      </term>
+                      <symbol> - </symbol>
+                      <term>
+                        <identifier> right_height </identifier>
+                      </term>
+                    </expression>
+                  </expressionList>
+                  <symbol> ) </symbol>
+                </term>
+              </expression>
+              <symbol> ; </symbol>
+            </returnStatement>
+          </statements>
+          <symbol> } </symbol>
+        </subroutineBody>
+      </subroutineDec>
+      <subroutineDec>
+        <keyword> method </keyword>
+        <identifier> BinaryNode </identifier>
+        <identifier> getRight </identifier>
+        <symbol> ( </symbol>
+        <parameterList>
+          <symbol> ) </symbol>
+          <subroutineBody>
+            <symbol> { </symbol>
+            <statements>
+              <returnStatement>
+                <keyword> return </keyword>
+                <expression>
+                  <term>
+                    <identifier> right </identifier>
+                  </term>
+                </expression>
+                <symbol> ; </symbol>
+              </returnStatement>
+            </statements>
+            <symbol> } </symbol>
+          </subroutineBody>
+        </subroutineDec>
+        <subroutineDec>
+          <keyword> method </keyword>
+          <identifier> BinaryNode </identifier>
+          <identifier> getLeft </identifier>
+          <symbol> ( </symbol>
+          <parameterList>
+            <symbol> ) </symbol>
+            <subroutineBody>
+              <symbol> { </symbol>
+              <statements>
+                <returnStatement>
+                  <keyword> return </keyword>
+                  <expression>
+                    <term>
+                      <identifier> left </identifier>
+                    </term>
+                  </expression>
+                  <symbol> ; </symbol>
+                </returnStatement>
+              </statements>
+              <symbol> } </symbol>
+            </subroutineBody>
+          </subroutineDec>
+          <subroutineDec>
+            <keyword> method </keyword>
+            <identifier> BinaryNode </identifier>
+            <identifier> getParent </identifier>
+            <symbol> ( </symbol>
+            <parameterList>
+              <symbol> ) </symbol>
+              <subroutineBody>
+                <symbol> { </symbol>
+                <statements>
+                  <returnStatement>
+                    <keyword> return </keyword>
+                    <expression>
+                      <term>
+                        <identifier> parent </identifier>
+                      </term>
+                    </expression>
+                    <symbol> ; </symbol>
+                  </returnStatement>
+                </statements>
+                <symbol> } </symbol>
+              </subroutineBody>
+            </subroutineDec>
+            <subroutineDec>
+              <keyword> method </keyword>
+              <keyword> int </keyword>
+              <identifier> getData </identifier>
+              <symbol> ( </symbol>
+              <parameterList>
+                <symbol> ) </symbol>
+                <subroutineBody>
+                  <symbol> { </symbol>
+                  <statements>
+                    <returnStatement>
+                      <keyword> return </keyword>
+                      <expression>
+                        <term>
+                          <identifier> data </identifier>
+                        </term>
+                      </expression>
+                      <symbol> ; </symbol>
+                    </returnStatement>
+                  </statements>
+                  <symbol> } </symbol>
+                </subroutineBody>
+              </subroutineDec>
+              <subroutineDec>
+                <keyword> method </keyword>
+                <keyword> int </keyword>
+                <identifier> getHeight </identifier>
+                <symbol> ( </symbol>
+                <parameterList>
+                  <symbol> ) </symbol>
+                  <subroutineBody>
+                    <symbol> { </symbol>
+                    <statements>
+                      <returnStatement>
+                        <keyword> return </keyword>
+                        <expression>
+                          <term>
+                            <identifier> height </identifier>
+                          </term>
+                        </expression>
+                        <symbol> ; </symbol>
+                      </returnStatement>
+                    </statements>
+                    <symbol> } </symbol>
+                  </subroutineBody>
+                </subroutineDec>
+                <subroutineDec>
+                  <keyword> method </keyword>
+                  <keyword> void </keyword>
+                  <identifier> setRight </identifier>
+                  <symbol> ( </symbol>
+                  <parameterList>
+                    <identifier> BinaryNode </identifier>
+                    <identifier> node </identifier>
+                  </parameterList>
+                  <symbol> ) </symbol>
+                  <subroutineBody>
+                    <symbol> { </symbol>
+                    <statements>
+                      <letStatement>
+                        <keyword> let </keyword>
+                        <identifier> right </identifier>
+                        <symbol> = </symbol>
+                        <expression>
+                          <term>
+                            <identifier> node </identifier>
+                          </term>
+                        </expression>
+                        <symbol> ; </symbol>
+                      </letStatement>
+                      <ifStatement>
+                        <keyword> if </keyword>
+                        <symbol> ( </symbol>
+                        <expression>
+                          <term>
+                            <symbol> ~ </symbol>
+                            <term>
+                              <symbol> ( </symbol>
+                              <expressionList>
+                                <expression>
+                                  <term>
+                                    <identifier> node </identifier>
+                                  </term>
+                                  <symbol> = </symbol>
+                                  <term>
+                                    <keyword> null </keyword>
+                                  </term>
+                                </expression>
+                              </expressionList>
+                              <symbol> ) </symbol>
+                            </term>
+                          </term>
+                        </expression>
+                        <symbol> ) </symbol>
+                        <symbol> { </symbol>
+                        <statements>
+                          <doStatement>
+                            <keyword> do </keyword>
+                            <expression>
+                              <term>
+                                <identifier> node </identifier>
+                                <symbol> . </symbol>
+                                <identifier> setParent </identifier>
+                                <symbol> ( </symbol>
+                                <expressionList>
+                                  <expression>
+                                    <term>
+                                      <keyword> this </keyword>
+                                    </term>
+                                  </expression>
+                                </expressionList>
+                                <symbol> ) </symbol>
+                              </term>
+                            </expression>
+                            <symbol> ; </symbol>
+                          </doStatement>
+                        </statements>
+                        <symbol> } </symbol>
+                      </ifStatement>
+                      <returnStatement>
+                        <keyword> return </keyword>
+                        <symbol> ; </symbol>
+                      </returnStatement>
+                    </statements>
+                    <symbol> } </symbol>
+                  </subroutineBody>
+                </subroutineDec>
+                <subroutineDec>
+                  <keyword> method </keyword>
+                  <keyword> void </keyword>
+                  <identifier> setLeft </identifier>
+                  <symbol> ( </symbol>
+                  <parameterList>
+                    <identifier> BinaryNode </identifier>
+                    <identifier> node </identifier>
+                  </parameterList>
+                  <symbol> ) </symbol>
+                  <subroutineBody>
+                    <symbol> { </symbol>
+                    <statements>
+                      <letStatement>
+                        <keyword> let </keyword>
+                        <identifier> left </identifier>
+                        <symbol> = </symbol>
+                        <expression>
+                          <term>
+                            <identifier> node </identifier>
+                          </term>
+                        </expression>
+                        <symbol> ; </symbol>
+                      </letStatement>
+                      <ifStatement>
+                        <keyword> if </keyword>
+                        <symbol> ( </symbol>
+                        <expression>
+                          <term>
+                            <symbol> ~ </symbol>
+                            <term>
+                              <symbol> ( </symbol>
+                              <expressionList>
+                                <expression>
+                                  <term>
+                                    <identifier> node </identifier>
+                                  </term>
+                                  <symbol> = </symbol>
+                                  <term>
+                                    <keyword> null </keyword>
+                                  </term>
+                                </expression>
+                              </expressionList>
+                              <symbol> ) </symbol>
+                            </term>
+                          </term>
+                        </expression>
+                        <symbol> ) </symbol>
+                        <symbol> { </symbol>
+                        <statements>
+                          <doStatement>
+                            <keyword> do </keyword>
+                            <expression>
+                              <term>
+                                <identifier> node </identifier>
+                                <symbol> . </symbol>
+                                <identifier> setParent </identifier>
+                                <symbol> ( </symbol>
+                                <expressionList>
+                                  <expression>
+                                    <term>
+                                      <keyword> this </keyword>
+                                    </term>
+                                  </expression>
+                                </expressionList>
+                                <symbol> ) </symbol>
+                              </term>
+                            </expression>
+                            <symbol> ; </symbol>
+                          </doStatement>
+                        </statements>
+                        <symbol> } </symbol>
+                      </ifStatement>
+                      <returnStatement>
+                        <keyword> return </keyword>
+                        <symbol> ; </symbol>
+                      </returnStatement>
+                    </statements>
+                    <symbol> } </symbol>
+                  </subroutineBody>
+                </subroutineDec>
+                <subroutineDec>
+                  <keyword> method </keyword>
+                  <keyword> void </keyword>
+                  <identifier> setParent </identifier>
+                  <symbol> ( </symbol>
+                  <parameterList>
+                    <identifier> BinaryNode </identifier>
+                    <identifier> node </identifier>
+                  </parameterList>
+                  <symbol> ) </symbol>
+                  <subroutineBody>
+                    <symbol> { </symbol>
+                    <statements>
+                      <letStatement>
+                        <keyword> let </keyword>
+                        <identifier> parent </identifier>
+                        <symbol> = </symbol>
+                        <expression>
+                          <term>
+                            <identifier> node </identifier>
+                          </term>
+                        </expression>
+                        <symbol> ; </symbol>
+                      </letStatement>
+                      <returnStatement>
+                        <keyword> return </keyword>
+                        <symbol> ; </symbol>
+                      </returnStatement>
+                    </statements>
+                    <symbol> } </symbol>
+                  </subroutineBody>
+                </subroutineDec>
+                <subroutineDec>
+                  <keyword> method </keyword>
+                  <keyword> void </keyword>
+                  <identifier> setData </identifier>
+                  <symbol> ( </symbol>
+                  <parameterList>
+                    <keyword> int </keyword>
+                    <identifier> value </identifier>
+                  </parameterList>
+                  <symbol> ) </symbol>
+                  <subroutineBody>
+                    <symbol> { </symbol>
+                    <statements>
+                      <letStatement>
+                        <keyword> let </keyword>
+                        <identifier> data </identifier>
+                        <symbol> = </symbol>
+                        <expression>
+                          <term>
+                            <identifier> value </identifier>
+                          </term>
+                        </expression>
+                        <symbol> ; </symbol>
+                      </letStatement>
+                      <returnStatement>
+                        <keyword> return </keyword>
+                        <symbol> ; </symbol>
+                      </returnStatement>
+                    </statements>
+                    <symbol> } </symbol>
+                  </subroutineBody>
+                </subroutineDec>
+                <subroutineDec>
+                  <keyword> method </keyword>
+                  <keyword> void </keyword>
+                  <identifier> setHeight </identifier>
+                  <symbol> ( </symbol>
+                  <parameterList>
+                    <keyword> int </keyword>
+                    <identifier> value </identifier>
+                  </parameterList>
+                  <symbol> ) </symbol>
+                  <subroutineBody>
+                    <symbol> { </symbol>
+                    <statements>
+                      <letStatement>
+                        <keyword> let </keyword>
+                        <identifier> height </identifier>
+                        <symbol> = </symbol>
+                        <expression>
+                          <term>
+                            <identifier> value </identifier>
+                          </term>
+                        </expression>
+                        <symbol> ; </symbol>
+                      </letStatement>
+                      <returnStatement>
+                        <keyword> return </keyword>
+                        <symbol> ; </symbol>
+                      </returnStatement>
+                    </statements>
+                    <symbol> } </symbol>
+                  </subroutineBody>
+                </subroutineDec>
+                <subroutineDec>
+                  <keyword> method </keyword>
+                  <keyword> void </keyword>
+                  <identifier> dispose </identifier>
+                  <symbol> ( </symbol>
+                  <parameterList>
+                    <symbol> ) </symbol>
+                    <subroutineBody>
+                      <symbol> { </symbol>
+                      <statements>
+                        <doStatement>
+                          <keyword> do </keyword>
+                          <expression>
+                            <term>
+                              <identifier> Memory </identifier>
+                              <symbol> . </symbol>
+                              <identifier> deAlloc </identifier>
+                              <symbol> ( </symbol>
+                              <expressionList>
+                                <expression>
+                                  <term>
+                                    <keyword> this </keyword>
+                                  </term>
+                                </expression>
+                              </expressionList>
+                              <symbol> ) </symbol>
+                            </term>
+                          </expression>
+                          <symbol> ; </symbol>
+                        </doStatement>
+                        <returnStatement>
+                          <keyword> return </keyword>
+                          <symbol> ; </symbol>
+                        </returnStatement>
+                      </statements>
+                      <symbol> } </symbol>
+                    </subroutineBody>
+                  </subroutineDec>
+</class>

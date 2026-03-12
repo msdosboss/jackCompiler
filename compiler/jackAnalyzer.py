@@ -1,5 +1,6 @@
 from tokenizer import Tokenizer
 from compilationEngine import CompilationEngine
+from syntaxException import JackSyntaxError
 import sys 
 if __name__ == "__main__":
     if(len(sys.argv) < 2):
@@ -7,5 +8,8 @@ if __name__ == "__main__":
         exit()
 
     tokenizer = Tokenizer(sys.argv[1])
-    compilationEngine = CompilationEngine(tokenizer, sys.argv[1].replace(".jack", ".xml"))
-    compilationEngine.compileClass()
+    compilationEngine = CompilationEngine(tokenizer, sys.argv[1])
+    try:
+        compilationEngine.compileClass()
+    except JackSyntaxError as e:
+        print(e)

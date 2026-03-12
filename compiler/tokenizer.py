@@ -116,7 +116,7 @@ class Tokenizer:
            self.str_index = 0
 
         # added this to keep track of line count
-        while(len(self.file_text[self.line_index]) == 0):
+        while(self.line_index < len(self.file_text) and len(self.file_text[self.line_index]) == 0):
             self.line_index += 1
 
         if(self.line_index >= len(self.file_text)):
@@ -133,6 +133,7 @@ class Tokenizer:
         self.current_char = self.file_text[self.line_index][self.str_index]
         self._skipWhiteSpace()
         return True
+
 
 
     def advance(self) -> bool:

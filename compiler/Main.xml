@@ -7,8 +7,343 @@
     <keyword> void </keyword>
     <identifier> main </identifier>
     <symbol> ( </symbol>
-    <symbol> ) </symbol>
-    <subroutineBody>
-    </subroutineBody>
-  </subroutineDec>
+    <parameterList>
+      <symbol> ) </symbol>
+      <subroutineBody>
+        <symbol> { </symbol>
+        <varDec>
+          <keyword> var </keyword>
+          <identifier> BinaryTree </identifier>
+          <identifier> tree </identifier>
+          <symbol> ; </symbol>
+        </varDec>
+        <varDec>
+          <keyword> var </keyword>
+          <keyword> int </keyword>
+          <identifier> i </identifier>
+          <symbol> ; </symbol>
+        </varDec>
+        <statements>
+          <letStatement>
+            <keyword> let </keyword>
+            <identifier> i </identifier>
+            <symbol> = </symbol>
+            <expression>
+              <term>
+                <integerConstant> 16 </integerConstant>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </letStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> Output </identifier>
+                <symbol> . </symbol>
+                <identifier> printString </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <stringConstant> Hello Orca! </stringConstant>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> Output </identifier>
+                <symbol> . </symbol>
+                <identifier> println </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <letStatement>
+            <keyword> let </keyword>
+            <identifier> tree </identifier>
+            <symbol> = </symbol>
+            <expression>
+              <term>
+                <identifier> BinaryTree </identifier>
+                <symbol> . </symbol>
+                <identifier> new </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <keyword> null </keyword>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </letStatement>
+          <whileStatement>
+            <keyword> while </keyword>
+            <symbol> ( </symbol>
+            <expression>
+              <term>
+                <symbol> ~ </symbol>
+                <term>
+                  <symbol> ( </symbol>
+                  <expressionList>
+                    <expression>
+                      <term>
+                        <identifier> i </identifier>
+                      </term>
+                      <symbol> = </symbol>
+                      <term>
+                        <integerConstant> 0 </integerConstant>
+                      </term>
+                    </expression>
+                  </expressionList>
+                  <symbol> ) </symbol>
+                </term>
+              </term>
+            </expression>
+            <symbol> ) </symbol>
+            <symbol> { </symbol>
+            <statements>
+              <doStatement>
+                <keyword> do </keyword>
+                <expression>
+                  <term>
+                    <identifier> tree </identifier>
+                    <symbol> . </symbol>
+                    <identifier> insert </identifier>
+                    <symbol> ( </symbol>
+                    <expressionList>
+                      <expression>
+                        <term>
+                          <identifier> i </identifier>
+                        </term>
+                      </expression>
+                    </expressionList>
+                    <symbol> ) </symbol>
+                  </term>
+                </expression>
+                <symbol> ; </symbol>
+              </doStatement>
+              <letStatement>
+                <keyword> let </keyword>
+                <identifier> i </identifier>
+                <symbol> = </symbol>
+                <expression>
+                  <term>
+                    <identifier> i </identifier>
+                  </term>
+                  <symbol> - </symbol>
+                  <term>
+                    <integerConstant> 1 </integerConstant>
+                  </term>
+                </expression>
+                <symbol> ; </symbol>
+              </letStatement>
+            </statements>
+            <symbol> } </symbol>
+          </whileStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> tree </identifier>
+                <symbol> . </symbol>
+                <identifier> remove </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <integerConstant> 5 </integerConstant>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> tree </identifier>
+                <symbol> . </symbol>
+                <identifier> remove </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <integerConstant> 7 </integerConstant>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> Output </identifier>
+                <symbol> . </symbol>
+                <identifier> printInt </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <identifier> tree </identifier>
+                      <symbol> . </symbol>
+                      <identifier> remove </identifier>
+                      <symbol> ( </symbol>
+                      <expressionList>
+                        <expression>
+                          <term>
+                            <integerConstant> 3 </integerConstant>
+                          </term>
+                        </expression>
+                      </expressionList>
+                      <symbol> ) </symbol>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> Output </identifier>
+                <symbol> . </symbol>
+                <identifier> println </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> Output </identifier>
+                <symbol> . </symbol>
+                <identifier> printInt </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                      <identifier> tree </identifier>
+                      <symbol> . </symbol>
+                      <identifier> remove </identifier>
+                      <symbol> ( </symbol>
+                      <expressionList>
+                        <expression>
+                          <term>
+                            <integerConstant> 3 </integerConstant>
+                          </term>
+                        </expression>
+                      </expressionList>
+                      <symbol> ) </symbol>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> Output </identifier>
+                <symbol> . </symbol>
+                <identifier> println </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> tree </identifier>
+                <symbol> . </symbol>
+                <identifier> inorderRead </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <doStatement>
+            <keyword> do </keyword>
+            <expression>
+              <term>
+                <identifier> tree </identifier>
+                <symbol> . </symbol>
+                <identifier> dispose </identifier>
+                <symbol> ( </symbol>
+                <expressionList>
+                  <expression>
+                    <term>
+                    </term>
+                  </expression>
+                </expressionList>
+                <symbol> ) </symbol>
+              </term>
+            </expression>
+            <symbol> ; </symbol>
+          </doStatement>
+          <returnStatement>
+            <keyword> return </keyword>
+            <symbol> ; </symbol>
+          </returnStatement>
+        </statements>
+        <symbol> } </symbol>
+      </subroutineBody>
+    </subroutineDec>
 </class>
