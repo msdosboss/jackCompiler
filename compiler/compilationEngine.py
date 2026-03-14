@@ -93,6 +93,8 @@ class CompilationEngine:
             token = '&gt;'
         elif(token == '<'):
             token = '&lt;'
+        elif(token == '&'):
+            token = '&amp;'
         self.output_file.write(f"<{tag}> {token} </{tag}>" + "\n")
 
     def _indentifierCheck(self, compile_step_name):
@@ -545,8 +547,9 @@ class CompilationEngine:
 
         elif(prev_token == '('):
             self._writeTag(token_type_dict[prev_type], prev_token)
-
-            self.compileExpressionList()
+            
+            #self.compileExpressionList()
+            self.compileExpression()
 
             self._symbolCheck(')', "compileTerm")
 

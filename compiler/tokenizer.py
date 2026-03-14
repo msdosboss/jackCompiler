@@ -149,29 +149,30 @@ class Tokenizer:
 
         if(self.current_char in symbol_set):
             self.token_type = -1
-            # skip one line comments
-            if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/'):
-                while((self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/') or 
-                      len(self.file_text[self.line_index]) == 0):
-                    if(self._skipComment() is False):
-                        return False
-            # skip multi line comments
-            elif(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '*'):
-                while(self.current_char != '*' or self.file_text[self.line_index][self.str_index + 1] != '/'):
-                    self._advanceFileText()
-                    if(self.str_index + 1 == len(self.file_text[self.line_index])):
-                        if(self._skipComment() is False):
-                            return False
-                # move past the */ chars
-                self._advanceFileText()
-                self._advanceFileText()
-                self._skipWhiteSpace()
+            if((self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/') or (self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '*')):
+                # skip one line comments
                 if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/'):
-                    while((self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/') or 
+                    while((self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/') or 
                           len(self.file_text[self.line_index]) == 0):
                         if(self._skipComment() is False):
                             return False
- 
+                # skip multi line comments
+                if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '*'):
+                    while(self.current_char != '*' or self.file_text[self.line_index][self.str_index + 1] != '/'):
+                        self._advanceFileText()
+                        if(self.str_index + 1 == len(self.file_text[self.line_index])):
+                            if(self._skipComment() is False):
+                                return False
+                    # move past the */ chars
+                    self._advanceFileText()
+                    self._advanceFileText()
+                    self._skipWhiteSpace()
+                    if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/'):
+                        while((self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/') or 
+                              len(self.file_text[self.line_index]) == 0):
+                            if(self._skipComment() is False):
+                                return False
+     
             else:
                 self.token_type = SYMBOL
                 self.current_token = self.current_char
