@@ -92,7 +92,9 @@ class Tokenizer:
         for i, _ in enumerate(self.file_text):
             self.file_text[i] = self.file_text[i].replace('\n', '')
 
-        self.current_char = self.file_text[0][0]
+        while(len(self.file_text[self.line_index]) == 0):
+            self.line_index += 1
+        self.current_char = self.file_text[self.line_index][0]
 
 
     def hasMoreTokens(self) -> bool:
@@ -106,7 +108,7 @@ class Tokenizer:
 
     def _skipWhiteSpace(self):
         #skips all white space
-        while(self.current_char == ' ' or self.current_char == '\t'): 
+        while(self.current_char == ' ' or self.current_char == '\t' or len(self.file_text[self.line_index]) == 0): 
             self._advanceFileText()
 
     def _advanceFileText(self):
@@ -127,6 +129,8 @@ class Tokenizer:
 
     def _skipComment(self):
         self.line_index += 1
+        while(len(self.file_text[self.line_index]) == 0):
+            self.line_index += 1
         self.str_index = 0
         if(self.hasMoreTokens() is False):
             return False
@@ -147,7 +151,8 @@ class Tokenizer:
             self.token_type = -1
             # skip one line comments
             if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/'):
-                while(self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/'):
+                while((self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/') or 
+                      len(self.file_text[self.line_index]) == 0):
                     if(self._skipComment() is False):
                         return False
             # skip multi line comments
@@ -161,12 +166,18 @@ class Tokenizer:
                 self._advanceFileText()
                 self._advanceFileText()
                 self._skipWhiteSpace()
+                if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/'):
+                    while((self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/') or 
+                          len(self.file_text[self.line_index]) == 0):
+                        if(self._skipComment() is False):
+                            return False
  
             else:
                 self.token_type = SYMBOL
                 self.current_token = self.current_char
                 self._advanceFileText() 
                 return True
+
 
         self.current_token = ""
         if(self.current_char == '\"'):

@@ -89,6 +89,10 @@ class CompilationEngine:
 
     def _writeTag(self, tag : str, token : str):
         self._writeTab()
+        if(token == '>'):
+            token = '&gt;'
+        elif(token == '<'):
+            token = '&lt;'
         self.output_file.write(f"<{tag}> {token} </{tag}>" + "\n")
 
     def _indentifierCheck(self, compile_step_name):
@@ -197,10 +201,11 @@ class CompilationEngine:
             self.compileSubroutine()
             key_word = self.tokenizer.keyWord()
 
-        self._symbolCheck("{", "compileClass")
+        self._symbolCheck("}", "compileClass")
 
         self.tab_count -= 1
         self.output_file.write("</class>")
+        self.output_file.write('\n')
         self.output_file.close()
         
 
@@ -432,9 +437,30 @@ class CompilationEngine:
         self.output_file.write("<doStatement>\n")
         self.tab_count += 1
 
-        self._keyWordCheck(DO, "compileWhile")
+        self._keyWordCheck(DO, "compileDo")
 
-        self.compileExpression()
+        self._indentifierCheck("compileDo")
+
+        if(self.tokenizer.current_token == '.'):
+            self._symbolCheck('.', "compileDo")
+            self._indentifierCheck("compileDo")
+
+
+        elif(self.tokenizer.current_token != '('):
+            raise JackSyntaxError(
+                    compile_step = "compileDo",
+                    file_name = self.input_file_name,
+                    line_count = self.tokenizer.lineCount(),
+                    actual_token = self.tokenizer.current_token,
+                    actual_type = token_type_dict[self.tokenizer.tokenType()],
+                    expected_token = "( or ."
+                )
+
+
+        self._symbolCheck('(', "compileDo")
+        self.compileExpressionList()
+        self._symbolCheck(')', "compileDo")
+
 
         self._symbolCheck(';', "compileDo")
 
@@ -486,7 +512,7 @@ class CompilationEngine:
         self.tab_count += 1
 
         # This is probably pretty slow
-        # I should probably create a devance method
+        # I should probably create a peek method
         # But that sounds annoying
         tokenizer_copy = copy.deepcopy(self.tokenizer)
         # this is the one instruction that is not LL(1), requring to look ahead 1 token to determine the type of term
@@ -565,6 +591,12 @@ class CompilationEngine:
         self.output_file.write("<expressionList>\n")
         self.tab_count += 1
         
+        if(self.tokenizer.current_token == ')'):
+            self.tab_count -= 1
+            self._writeTab()
+            self.output_file.write("</expressionList>\n")
+            return
+
         self.compileExpression()
         while(self.tokenizer.current_token == ','):
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
