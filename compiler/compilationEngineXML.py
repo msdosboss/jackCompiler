@@ -1,4 +1,3 @@
-import copy
 
 from tokenizer import Tokenizer
 from tokenizer import KEYWORD
@@ -363,6 +362,7 @@ class CompilationEngine:
 
         self._symbolCheck('=', "compileLet")
 
+
         self.compileExpression()
 
         self._symbolCheck(';', "compileLet")
@@ -513,40 +513,36 @@ class CompilationEngine:
         self.output_file.write("<term>\n")
         self.tab_count += 1
 
-        # This is probably pretty slow
-        # I should probably create a peek method
-        # But that sounds annoying
-        tokenizer_copy = copy.deepcopy(self.tokenizer)
-        # this is the one instruction that is not LL(1), requring to look ahead 1 token to determine the type of term
-        prev_token = self.tokenizer.current_token
-        prev_type = self.tokenizer.tokenType()
-        prev_key_word = self.tokenizer.keyWord()
-        self.tokenizer.advance()
+        peek_token, peek_type, peek_key_word = self.tokenizer.peek()
 
-        if(prev_type == INT_CONST             or 
-           prev_type == STRING_CONST          or
-           prev_key_word in keyword_const_set or
-           (prev_type == IDENTIFIER and self.tokenizer.current_token != '[' and self.tokenizer.current_token != '.' and self.tokenizer.current_token != '(')):
-            self._writeTag(token_type_dict[prev_type], prev_token)
+        if(self.tokenizer.tokenType() == INT_CONST             or 
+           self.tokenizer.tokenType() == STRING_CONST          or
+           self.tokenizer.keyWord() in keyword_const_set or
+           (self.tokenizer.tokenType() == IDENTIFIER and peek_token != '[' and peek_token != '.' and peek_token != '(')):
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
 
-        elif(prev_token in unaryOp_set):
-            self._writeTag(token_type_dict[prev_type], prev_token)
+        elif(self.tokenizer.current_token in unaryOp_set):
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
             
             self.compileTerm()
 
         # Indexing into array
-        elif(prev_type == IDENTIFIER and self.tokenizer.current_token == '['):
-            self._writeTag(token_type_dict[prev_type], prev_token)
-
+        elif(self.tokenizer.tokenType() == IDENTIFIER and peek_token == '['):
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+
+            self._writeTag(token_type_dict[peek_type], peek_token)
             self.tokenizer.advance()
 
             self.compileExpression()
 
             self._symbolCheck(']', "compileTerm")
 
-        elif(prev_token == '('):
-            self._writeTag(token_type_dict[prev_type], prev_token)
+        elif(self.tokenizer.current_token == '('):
+            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
             
             #self.compileExpressionList()
             self.compileExpression()
@@ -554,10 +550,11 @@ class CompilationEngine:
             self._symbolCheck(')', "compileTerm")
 
         # Calling function
-        elif(prev_type == IDENTIFIER and self.tokenizer.current_token == '('):
-            self._writeTag(token_type_dict[prev_type], prev_token)
-
+        elif(self.tokenizer.tokenType() == IDENTIFIER and peek_token == '('):
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            self.tokenizer.advance()
+
+            self._writeTag(token_type_dict[peek_type], peek_token)
             self.tokenizer.advance()
 
             self.compileExpressionList()
@@ -566,11 +563,13 @@ class CompilationEngine:
             
 
         # Calling method
-        elif(prev_type == IDENTIFIER and self.tokenizer.current_token == '.'):
-            self._writeTag(token_type_dict[prev_type], prev_token)
-
+        elif(self.tokenizer.tokenType() == IDENTIFIER and peek_token == '.'):
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
+
+            self._writeTag(token_type_dict[peek_type], peek_token)
+            self.tokenizer.advance()
+            #print(self.tokenizer.current_token)
 
             self._indentifierCheck("compileTerm")
 
@@ -580,9 +579,9 @@ class CompilationEngine:
 
             self._symbolCheck(')', "compileTerm")
 
-        # If there is no valid term I don't want to advance forward one
         else:
-            self.tokenizer = tokenizer_copy
+            print("oof")
+
 
         self.tab_count -= 1
         self._writeTab()
