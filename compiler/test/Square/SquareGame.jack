@@ -13,6 +13,11 @@
  * The 'z' and 'x' keys are used, respectively, to decrement and increment
  * the square's size. The 'q' key is used to quit the game.
  */
+//adsfs
+/*asdf*/
+//asfsa
+/*adf*/
+//asf
 class SquareGame {
    field Square square; // the square of this game
    field int direction; // the square's current direction: 

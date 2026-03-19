@@ -139,6 +139,25 @@ class Tokenizer:
         return True
 
 
+    # Returns a tuple of the state of peek in form of:
+    # (token, type, key_word)
+    def peek(self) -> tuple:
+        old_line_index = self.line_index
+        old_str_index = self.str_index
+        old_current_token = self.current_token
+        old_token_type = self.token_type
+        old_current_char = self.current_char
+        self.advance()
+        peek_token = self.current_token
+        peek_token_type = self.tokenType()
+        peek_token_key_word = self.keyWord()
+        self.current_char = old_current_char
+        self.token_type = old_token_type
+        self.current_token = old_current_token
+        self.line_index = old_line_index
+        self.str_index = old_str_index
+        return (peek_token, peek_token_type, peek_token_key_word)
+
 
     def advance(self) -> bool:
         if (self.hasMoreTokens() is False):
