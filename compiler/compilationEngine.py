@@ -1,4 +1,5 @@
-
+from VMWriter import VMWriter
+from symbolTable import SymbolTable
 from tokenizer import Tokenizer
 from tokenizer import KEYWORD
 from tokenizer import SYMBOL
@@ -28,8 +29,49 @@ from tokenizer import THIS
 from tokenizer import VOID
 from tokenizer import keyword_dict
 
+from VMWriter import CONSTANT_SEG
+from VMWriter import ADD
+from VMWriter import SUB
+from VMWriter import NEG
+from VMWriter import EQ
+from VMWriter import GT
+from VMWriter import LT
+from VMWriter import AND
+from VMWriter import OR
+from VMWriter import NOT
+
+symbol_to_unary_command_dict = {
+    '-' : NEG,
+    '~' : NOT
+}
+
+symbol_to_command_dict = {
+    '+' : ADD,
+    '-' : SUB,
+    '=' : EQ,
+    '>' : GT,
+    '<' : LT,
+    '&' : AND,
+    '|' : OR
+}
+
+from symbolTable import STATIC_KIND
+from symbolTable import FIELD_KIND
+from symbolTable import ARG_KIND
+from symbolTable import VAR_KIND
+
+kind_dict = {
+    "static" : STATIC_KIND,
+    "field" : FIELD_KIND,
+    "arg" : ARG_KIND,
+    "var" : VAR_KIND
+}
+
+from VMWriter import segment_dict 
+
 from syntaxException import JackSyntaxError
 
+reverse_segment_dict = {value: key for key, value in segment_dict.items()}
 reverse_keyword_dict = {value: key for key, value in keyword_dict.items()}
 reverse_keyword_dict[-1] = "Non-keyword"
 
@@ -67,7 +109,7 @@ keyword_const_set = {
 }
 
 class CompilationEngine:
-    def __init__(self, tokenizer : Tokenizer, input_file_name : str):
+    def __init__(self, tokenizer : Tokenizer, input_file_name : str, class_symbol_table : SymbolTable, subroutine_symbol_table : SymbolTable, writer : VMWriter):
         self.tokenizer = tokenizer
         self.input_file_name = input_file_name
         self.output_file = open(input_file_name.replace(".jack", ".xml"), "w")
@@ -79,6 +121,9 @@ class CompilationEngine:
             WHILE : self.compileWhile,
             RETURN : self.compileReturn
         }       
+        self.class_symbol_table = class_symbol_table
+        self.subroutine_symbol_table = subroutine_symbol_table
+        self.writer = writer
 
 
     def _writeTab(self):
@@ -106,8 +151,8 @@ class CompilationEngine:
                     actual_type = token_type_dict[self.tokenizer.tokenType()],
                     expected_type = "Identifier"
                 )
-        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
+        return self.tokenizer.current_token
 
     def _symbolCheck(self, symbol, compile_step_name):
         if(self.tokenizer.current_token != symbol):
@@ -119,7 +164,6 @@ class CompilationEngine:
                     actual_type = token_type_dict[self.tokenizer.tokenType()],
                     expected_token = symbol
                 )
-        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
 
     def _keyWordCheck(self, key_word, compile_step_name):
@@ -150,8 +194,8 @@ class CompilationEngine:
                     actual_type = token_type_dict[self.tokenizer.tokenType()],
                     expected_type = "int or boolean or char"
                 )
-        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
+        return self.tokenizer.current_token
 
     def _isDataTypeCheck(self, compile_step_name):
         current_key_word = self.tokenizer.keyWord()
@@ -167,23 +211,27 @@ class CompilationEngine:
         self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
 
-    def _compileVarGeneral(self):
-        self._isDataTypeCheck("compileVarGeneral")
+    def _compileVarGeneral(self, current_symbol_table):
+        data_kind = self.tokenizer.current_token
+        self.tokenizer.advance()
+        data_type = self._isDataTypeCheck("compileVarGeneral")
 
-        self._indentifierCheck("compileVarGeneral")
+        name = self._indentifierCheck("compileVarGeneral")
+
+        current_symbol_table.define(name, data_type, kind_dict[data_kind])
 
         while(self.tokenizer.current_token == ','):
-            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
-            self._indentifierCheck("compileVarGeneral")
+            name = self._indentifierCheck("compileVarGeneral")
+            current_symbol_table.define(name, data_type, kind_dict[data_kind])
 
     # This should be called with a fresh tokenizer
     def compileClass(self):
         if(not self.tokenizer.hasMoreTokens()):
             print("compileClass called when there were no tokens left")
             return
-        self.output_file.write("<class>\n")
-        self.tab_count += 1
+
+        self.class_symbol_table.reset()
 
         self.tokenizer.advance()
         self._keyWordCheck(CLASS, "compileClass")
@@ -204,34 +252,22 @@ class CompilationEngine:
 
         self._symbolCheck("}", "compileClass")
 
-        self.tab_count -= 1
-        self.output_file.write("</class>")
-        self.output_file.write('\n')
-        self.output_file.close()
+        self.writer.close()
         
 
     def compileClassVarDec(self):
-        self._writeTab()
-        self.output_file.write("<classVarDec>\n")
-        self.tab_count += 1
-
         # don't need to verify the first token becuase if this the token is either static or field
-        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
-        self.tokenizer.advance()
+        #self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        #self.tokenizer.advance()
         
-        self._compileVarGeneral()
+        self._compileVarGeneral(self.class_symbol_table)
 
         self._symbolCheck(';', "compileClassVarDec")
 
-        self.tab_count -= 1
-        self._writeTab()
-        self.output_file.write("</classVarDec>\n")
 
 
     def compileSubroutine(self):
-        self._writeTab()
-        self.output_file.write("<subroutineDec>\n")
-        self.tab_count += 1
+        self.class_symbol_table.reset()
 
         self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
         self.tokenizer.advance()
@@ -248,9 +284,6 @@ class CompilationEngine:
 
         self.compileSubroutineBody()
 
-        self.tab_count -= 1
-        self._writeTab()
-        self.output_file.write("</subroutineDec>\n")
 
 
     def compileParameterList(self):
@@ -312,10 +345,7 @@ class CompilationEngine:
         self.output_file.write("<varDec>\n")
         self.tab_count += 1
         
-        self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
-        self.tokenizer.advance()
-        
-        self._compileVarGeneral()
+        self._compileVarGeneral(self.subroutine_symbol_table)
 
         self._symbolCheck(";", "compileVarDec")
 
@@ -478,8 +508,6 @@ class CompilationEngine:
 
         self._keyWordCheck(RETURN, "compileReturn")
 
-        # optional expression to return
-        # todo make it optional
         if(self.tokenizer.current_token != ';'):
             self.compileExpression()
 
@@ -498,10 +526,12 @@ class CompilationEngine:
         self.compileTerm()
 
         while(self.tokenizer.current_token in operator_set):
+            op = self.tokenizer.current_token
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
             
             self.compileTerm()
+            self.writer.writeArithmetic(symbol_to_command_dict[op])
             
         self.tab_count -= 1
         self._writeTab()
@@ -515,18 +545,36 @@ class CompilationEngine:
 
         peek_token, peek_type, peek_key_word = self.tokenizer.peek()
 
-        if(self.tokenizer.tokenType() == INT_CONST             or 
-           self.tokenizer.tokenType() == STRING_CONST          or
-           self.tokenizer.keyWord() in keyword_const_set or
-           (self.tokenizer.tokenType() == IDENTIFIER and peek_token != '[' and peek_token != '.' and peek_token != '(')):
+        if(self.tokenizer.tokenType() == INT_CONST):
+            self.writer.writePush(CONSTANT_SEG, int(self.tokenizer.current_token))
+            self.tokenizer.advance()
+
+        elif(self.tokenizer.tokenType() == STRING_CONST):
+            # Pushing str_len arg for String.New
+            self.writer.writePush(CONSTANT_SEG, len(self.tokenizer.current_token))
+            # Calling OS String constructor
+            self.writer.writeCall("String.new", 1)
+
+            for char in self.tokenizer.current_token:
+                # ord is an ascii cast
+                self.writer.writePush(CONSTANT_SEG, ord(char))
+                self.writer.writeCall("String.appendChar", 1)
+
+
+            self.tokenizer.advance()
+
+        elif(self.tokenizer.tokenType() == STRING_CONST          or
+             self.tokenizer.keyWord() in keyword_const_set or
+            (self.tokenizer.tokenType() == IDENTIFIER and peek_token != '[' and peek_token != '.' and peek_token != '(')):
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
 
         elif(self.tokenizer.current_token in unaryOp_set):
-            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            unaryOp = self.tokenizer.current_token
             self.tokenizer.advance()
             
             self.compileTerm()
+            self.writer.writeArithmetic(symbol_to_unary_command_dict[unaryOp])
 
         # Indexing into array
         elif(self.tokenizer.tokenType() == IDENTIFIER and peek_token == '['):
@@ -551,13 +599,15 @@ class CompilationEngine:
 
         # Calling function
         elif(self.tokenizer.tokenType() == IDENTIFIER and peek_token == '('):
-            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+            function_name = self.tokenizer.current_token
             self.tokenizer.advance()
 
-            self._writeTag(token_type_dict[peek_type], peek_token)
+            # Moving past '('
             self.tokenizer.advance()
 
-            self.compileExpressionList()
+            arg_count = self.compileExpressionList()
+
+            self.writer.writeCall(function_name, arg_count)
 
             self._symbolCheck(')', "compileTerm")
             
@@ -588,26 +638,19 @@ class CompilationEngine:
         self.output_file.write("</term>\n")
 
 
-    def compileExpressionList(self):
-        self._writeTab()
-        self.output_file.write("<expressionList>\n")
-        self.tab_count += 1
-        
-        if(self.tokenizer.current_token == ')'):
-            self.tab_count -= 1
-            self._writeTab()
-            self.output_file.write("</expressionList>\n")
-            return
+    def compileExpressionList(self)->int:
+        arg_count = 0
 
+        if(self.tokenizer.current_token == ')'):
+            return arg_count
+
+        arg_count += 1
         self.compileExpression()
         while(self.tokenizer.current_token == ','):
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
 
+            arg_count += 1
             self.compileExpression()
 
-
-        self.tab_count -= 1
-        self._writeTab()
-        self.output_file.write("</expressionList>\n")
-
+        return arg_count

@@ -1,16 +1,16 @@
-STATIC = 0
-FIELD = 1
-ARG = 2
-VAR = 3
+STATIC_KIND = 0
+FIELD_KIND = 1
+ARG_KIND = 2
+VAR_KIND = 3
 
 class SymbolTable:
     def __init__(self):
         self.table_dict = dict()
         self.kind_index = {
-            STATIC : 0,
-            FIELD : 0,
-            ARG : 0,
-            VAR : 0
+            STATIC_KIND : 0,
+            FIELD_KIND : 0,
+            ARG_KIND : 0,
+            VAR_KIND : 0
         }
 
     def reset(self)->None:
@@ -19,8 +19,9 @@ class SymbolTable:
     def define(self, name : str, symbol_type : str, kind : int)->None:
         # symbol_type: int, char, bool, *class_identifier*
         # kind: STATIC, FIELD, ARG, VAR
-        self.table_dict[name] = (symbol_type, kind, self.kind_index[kind])
-        self.kind_index[kind] += 1
+        if(name not in self.table_dict):
+            self.table_dict[name] = (symbol_type, kind, self.kind_index[kind])
+            self.kind_index[kind] += 1
 
     def varCount(self, kind : int)->int:
         return self.kind_index[kind]
