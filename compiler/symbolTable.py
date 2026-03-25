@@ -13,8 +13,11 @@ class SymbolTable:
             VAR_KIND : 0
         }
 
+    def __str__(self):
+        return f"{self.table_dict}"
+
     def reset(self)->None:
-        self.table_dict = dict()
+        self.__init__()
 
     def define(self, name : str, symbol_type : str, kind : int)->None:
         # symbol_type: int, char, bool, *class_identifier*
@@ -34,3 +37,6 @@ class SymbolTable:
 
     def indexOf(self, name : str)->int:
         return self.table_dict[name][2]
+
+    def isIn(self, name : str)->bool:
+        return (name in self.table_dict)

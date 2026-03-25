@@ -1,5 +1,3 @@
-from VMWriter import VMWriter
-from symbolTable import SymbolTable
 from tokenizer import Tokenizer
 from tokenizer import KEYWORD
 from tokenizer import SYMBOL
@@ -29,7 +27,15 @@ from tokenizer import THIS
 from tokenizer import VOID
 from tokenizer import keyword_dict
 
+from VMWriter import VMWriter
+from VMWriter import segment_dict 
+from VMWriter import POINTER_SEG
 from VMWriter import CONSTANT_SEG
+from VMWriter import STATIC_SEG
+from VMWriter import THIS_SEG
+from VMWriter import ARGUMENT_SEG
+from VMWriter import LOCAL_SEG
+from VMWriter import TEMP_SEG
 from VMWriter import ADD
 from VMWriter import SUB
 from VMWriter import NEG
@@ -39,6 +45,22 @@ from VMWriter import LT
 from VMWriter import AND
 from VMWriter import OR
 from VMWriter import NOT
+
+from symbolTable import SymbolTable
+from symbolTable import STATIC_KIND
+from symbolTable import FIELD_KIND
+from symbolTable import ARG_KIND
+from symbolTable import VAR_KIND
+
+from syntaxException import JackSyntaxError
+from referenceException import JackReferenceError
+
+kind_to_seg_dict = {
+    STATIC_KIND : STATIC_SEG,
+    FIELD_KIND : THIS_SEG,
+    ARG_KIND : ARGUMENT_SEG,
+    VAR_KIND : LOCAL_SEG
+}
 
 symbol_to_unary_command_dict = {
     '-' : NEG,
@@ -55,10 +77,6 @@ symbol_to_command_dict = {
     '|' : OR
 }
 
-from symbolTable import STATIC_KIND
-from symbolTable import FIELD_KIND
-from symbolTable import ARG_KIND
-from symbolTable import VAR_KIND
 
 kind_dict = {
     "static" : STATIC_KIND,
@@ -67,9 +85,7 @@ kind_dict = {
     "var" : VAR_KIND
 }
 
-from VMWriter import segment_dict 
 
-from syntaxException import JackSyntaxError
 
 reverse_segment_dict = {value: key for key, value in segment_dict.items()}
 reverse_keyword_dict = {value: key for key, value in keyword_dict.items()}
@@ -124,6 +140,7 @@ class CompilationEngine:
         self.class_symbol_table = class_symbol_table
         self.subroutine_symbol_table = subroutine_symbol_table
         self.writer = writer
+        self.label_counter = 0
 
 
     def _writeTab(self):
@@ -141,6 +158,15 @@ class CompilationEngine:
             token = '&amp;'
         self.output_file.write(f"<{tag}> {token} </{tag}>" + "\n")
 
+    def _whichSymbolTable(self, token):
+        if(self.subroutine_symbol_table.isIn(token)):
+            return self.subroutine_symbol_table
+        elif(self.class_symbol_table.isIn(token)):
+            return self.class_symbol_table
+        else:
+            raise JackReferenceError(token, self.tokenizer.lineCount(), self.subroutine_symbol_table, self.class_symbol_table)
+
+
     def _indentifierCheck(self, compile_step_name):
         if(self.tokenizer.tokenType() != IDENTIFIER):
             raise JackSyntaxError(
@@ -151,8 +177,9 @@ class CompilationEngine:
                     actual_type = token_type_dict[self.tokenizer.tokenType()],
                     expected_type = "Identifier"
                 )
+        current_token = self.tokenizer.current_token
         self.tokenizer.advance()
-        return self.tokenizer.current_token
+        return current_token
 
     def _symbolCheck(self, symbol, compile_step_name):
         if(self.tokenizer.current_token != symbol):
@@ -194,8 +221,9 @@ class CompilationEngine:
                     actual_type = token_type_dict[self.tokenizer.tokenType()],
                     expected_type = "int or boolean or char"
                 )
+        current_token = self.tokenizer.current_token
         self.tokenizer.advance()
-        return self.tokenizer.current_token
+        return current_token
 
     def _isDataTypeCheck(self, compile_step_name):
         current_key_word = self.tokenizer.keyWord()
@@ -379,7 +407,11 @@ class CompilationEngine:
 
         self._keyWordCheck(LET, "compileLet")
 
-        self._indentifierCheck("compileLet")
+        var_name = self.tokenizer.current_token
+        symbol_table = self._whichSymbolTable(var_name)
+        segment = kind_to_seg_dict[symbol_table.kindOf(var_name)]
+        index = symbol_table.indexOf(var_name)
+        self.tokenizer.advance()
 
         # optional array indexing
         if(self.tokenizer.current_token == '['):
@@ -396,6 +428,7 @@ class CompilationEngine:
         self.compileExpression()
 
         self._symbolCheck(';', "compileLet")
+        self.writer.writePop(segment, index)
 
         self.tab_count -= 1
         self._writeTab()
@@ -417,9 +450,15 @@ class CompilationEngine:
 
         self._symbolCheck('{', "compileIf")
 
+        self.writer.writeArithmetic(NEG)
+        self.writer.writeIf(f"L{self.label_counter}")
+
         self.compileStatements()
         
         self._symbolCheck('}', "compileIf")
+
+        self.writer.writeLabel(f"L{self.label_counter}")
+        self.label_counter += 1
 
         #optional else check
         if(self.tokenizer.keyWord() == ELSE):
@@ -432,6 +471,8 @@ class CompilationEngine:
             
             self._symbolCheck('}', "compileIf")
 
+        self.writer.writeLabel(f"L{self.label_counter}")
+        self.label_counter += 1
 
 
         self.tab_count -= 1
@@ -448,16 +489,24 @@ class CompilationEngine:
 
         self._symbolCheck('(', "compileWhile")
 
+        self.writer.writeLabel(f"L{self.label_counter}")
+
         self.compileExpression()
 
         self._symbolCheck(')', "compileWhile")
 
         self._symbolCheck('{', "compileWhile")
 
+        self.writer.writeArithmetic(NOT)
+        self.writer.writeIf(f"L{self.label_counter + 1}")
+
         self.compileStatements()
         
         self._symbolCheck('}', "compileWhile")
 
+        self.writer.writeGoto(f"L{self.label_counter}")
+        self.label_counter += 1
+        self.writer.writeLabel(f"L{self.label_counter}")
 
         self.tab_count -= 1
         self._writeTab()
@@ -471,6 +520,7 @@ class CompilationEngine:
 
         self._keyWordCheck(DO, "compileDo")
 
+        function_name = self.tokenizer.current_token
         self._indentifierCheck("compileDo")
 
         if(self.tokenizer.current_token == '.'):
@@ -490,11 +540,13 @@ class CompilationEngine:
 
 
         self._symbolCheck('(', "compileDo")
-        self.compileExpressionList()
+        nArgs = self.compileExpressionList()
         self._symbolCheck(')', "compileDo")
 
 
         self._symbolCheck(';', "compileDo")
+        self.writer.writeCall(function_name, nArgs)
+        self.writer.writePop(TEMP_SEG, 0)
 
         self.tab_count -= 1
         self._writeTab()
@@ -510,8 +562,11 @@ class CompilationEngine:
 
         if(self.tokenizer.current_token != ';'):
             self.compileExpression()
+        else:
+            self.writer.writePush(CONSTANT_SEG, 0)
 
         self._symbolCheck(';', "compileReturn")
+        self.writer.writeReturn()
 
         self.tab_count -= 1
         self._writeTab()
@@ -563,10 +618,25 @@ class CompilationEngine:
 
             self.tokenizer.advance()
 
-        elif(self.tokenizer.tokenType() == STRING_CONST          or
-             self.tokenizer.keyWord() in keyword_const_set or
-            (self.tokenizer.tokenType() == IDENTIFIER and peek_token != '[' and peek_token != '.' and peek_token != '(')):
-            self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
+        elif(self.tokenizer.keyWord() in keyword_const_set):
+            if(self.tokenizer.keyWord() == NULL or self.tokenizer.keyword() == FALSE):
+                self.writer.writePush(CONSTANT_SEG, 0)
+            elif(self.tokenizer.keyWord() == TRUE):
+                self.writer.writePush(CONSTANT_SEG, 1)
+                self.writer.writeArithmetic(NEG)
+            elif(self.tokenizer.keyWord() == THIS):
+                self.writer.writePush(POINTER_SEG, 0)
+            
+            self.tokenizer.advance()
+
+        elif((self.tokenizer.tokenType() == IDENTIFIER and peek_token != '[' and peek_token != '.' and peek_token != '(')):
+            current_token = self.tokenizer.current_token
+            symbol_table = self._whichSymbolTable(current_token)
+            
+            segment = kind_to_seg_dict[symbol_table.kindOf(current_token)]
+            index = symbol_table.indexOf(current_token)
+            self.writer.writePush(segment, index)
+                
             self.tokenizer.advance()
 
         elif(self.tokenizer.current_token in unaryOp_set):
@@ -614,6 +684,8 @@ class CompilationEngine:
 
         # Calling method
         elif(self.tokenizer.tokenType() == IDENTIFIER and peek_token == '.'):
+            current_token = self.tokenizer.current_token
+            #symbol_table = self._whichSymbolTable(current_token)
             self._writeTag(token_type_dict[self.tokenizer.tokenType()], self.tokenizer.current_token)
             self.tokenizer.advance()
 

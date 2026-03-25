@@ -1,4 +1,5 @@
 push constant 16
+pop local 1
 push constant 11
 call String.new 1
 push constant 72
@@ -23,13 +24,47 @@ push constant 97
 call String.appendChar 1
 push constant 33
 call String.appendChar 1
+call Output 1
+pop temp 0
+call Output 0
+pop temp 0
+push constant 0
+pop local 0
+label L0
+push local 1
 push constant 0
 eq
 not
+not
+if-goto L1
+push local 1
+call tree 1
+pop temp 0
+push local 1
 push constant 1
 sub
+pop local 1
+goto L0
+label L1
 push constant 5
+call tree 1
+pop temp 0
 push constant 7
+call tree 1
+pop temp 0
 push constant 3
+call Output 1
+pop temp 0
+call Output 0
+pop temp 0
 push constant 3
-
+call Output 1
+pop temp 0
+call Output 0
+pop temp 0
+call tree 0
+pop temp 0
+call tree 0
+pop temp 0
+push constant 0
+return

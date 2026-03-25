@@ -71,6 +71,9 @@ class VMWriter:
     def writeFunction(self, name, nVars):
         self.output_file.write(f"function {name} {nVars}\n")
 
+    def writeReturn(self):
+        self.output_file.write("return")
+
     def close(self):
         self.output_file.write("\n")
         self.output_file.close()

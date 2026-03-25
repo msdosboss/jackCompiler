@@ -1,6 +1,7 @@
 from tokenizer import Tokenizer
 from compilationEngine import CompilationEngine
 from syntaxException import JackSyntaxError
+from referenceException import JackReferenceError
 from symbolTable import SymbolTable
 from VMWriter import VMWriter
 import sys 
@@ -17,4 +18,6 @@ if __name__ == "__main__":
     try:
         compilationEngine.compileClass()
     except JackSyntaxError as e:
+        print(e)
+    except JackReferenceError as e:
         print(e)

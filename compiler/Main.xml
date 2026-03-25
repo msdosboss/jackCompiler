@@ -35,7 +35,6 @@
           <symbol> . </symbol>
           <expression>
             <term>
-              <keyword> null </keyword>
             </term>
           </expression>
         </term>
@@ -49,7 +48,6 @@
             <symbol> ( </symbol>
             <expression>
               <term>
-                <identifier> i </identifier>
               </term>
               <symbol> = </symbol>
               <term>
@@ -63,7 +61,6 @@
           <keyword> do </keyword>
           <expression>
             <term>
-              <identifier> i </identifier>
             </term>
           </expression>
         </doStatement>
@@ -71,7 +68,6 @@
           <keyword> let </keyword>
           <expression>
             <term>
-              <identifier> i </identifier>
             </term>
             <symbol> - </symbol>
             <term>
