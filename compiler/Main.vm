@@ -1,34 +1,36 @@
+function Main.main 2
 push constant 16
 pop local 1
 push constant 11
 call String.new 1
 push constant 72
-call String.appendChar 1
+call String.appendChar 2
 push constant 101
-call String.appendChar 1
+call String.appendChar 2
 push constant 108
-call String.appendChar 1
+call String.appendChar 2
 push constant 108
-call String.appendChar 1
+call String.appendChar 2
 push constant 111
-call String.appendChar 1
+call String.appendChar 2
 push constant 32
-call String.appendChar 1
+call String.appendChar 2
 push constant 79
-call String.appendChar 1
+call String.appendChar 2
 push constant 114
-call String.appendChar 1
+call String.appendChar 2
 push constant 99
-call String.appendChar 1
+call String.appendChar 2
 push constant 97
-call String.appendChar 1
+call String.appendChar 2
 push constant 33
-call String.appendChar 1
-call Output 1
+call String.appendChar 2
+call Output.printString 1
 pop temp 0
-call Output 0
+call Output.println 0
 pop temp 0
 push constant 0
+call BinaryTree.new 1
 pop local 0
 label L0
 push local 1
@@ -37,8 +39,9 @@ eq
 not
 not
 if-goto L1
+push local 0
 push local 1
-call tree 1
+call BinaryTree.insert 2
 pop temp 0
 push local 1
 push constant 1
@@ -46,25 +49,34 @@ sub
 pop local 1
 goto L0
 label L1
+push local 0
 push constant 5
-call tree 1
+call BinaryTree.remove 2
 pop temp 0
+push local 0
 push constant 7
-call tree 1
+call BinaryTree.remove 2
 pop temp 0
+push local 0
 push constant 3
-call Output 1
+call BinaryTree.remove 2
+call Output.printInt 1
 pop temp 0
-call Output 0
+call Output.println 0
 pop temp 0
+push local 0
 push constant 3
-call Output 1
+call BinaryTree.remove 2
+call Output.printInt 1
 pop temp 0
-call Output 0
+call Output.println 0
 pop temp 0
-call tree 0
+push local 0
+call BinaryTree.inorderRead 1
 pop temp 0
-call tree 0
+push local 0
+call BinaryTree.dispose 1
 pop temp 0
 push constant 0
 return
+

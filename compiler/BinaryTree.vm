@@ -1,0 +1,700 @@
+function BinaryTree.new 0
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push pointer 0
+return
+function BinaryTree.remove 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+not
+not
+if-goto L0
+push pointer 0
+push this 0
+push argument 1
+call BinaryTree.removeHelper 3
+return
+label L0
+label L1
+push constant 0
+return
+function BinaryTree.removeHelper 2
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getData 1
+push argument 2
+eq
+not
+if-goto L2
+push argument 1
+call removeNode 1
+pop temp 0
+push constant 1
+neg
+return
+label L2
+label L3
+push argument 1
+call BinaryNode.getLeft 1
+pop local 0
+push argument 1
+call BinaryNode.getRight 1
+pop local 1
+push argument 1
+call BinaryNode.getData 1
+push argument 2
+lt
+not
+if-goto L4
+push local 1
+push constant 0
+eq
+not
+not
+if-goto L4
+push pointer 0
+push local 1
+push argument 2
+call BinaryTree.removeHelper 3
+return
+label L4
+label L5
+label L6
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L7
+push pointer 0
+push local 0
+push argument 2
+call BinaryTree.removeHelper 3
+return
+label L7
+label L8
+label L9
+push constant 0
+return
+function BinaryTree.removeNode 3
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getParent 1
+pop local 1
+push argument 1
+call BinaryNode.getLeft 1
+push constant 0
+eq
+not
+push argument 1
+call BinaryNode.getRight 1
+push constant 0
+eq
+not
+and
+not
+if-goto L10
+push argument 1
+call BinaryNode.getRight 1
+pop local 0
+label L10
+push local 0
+call BinaryNode.getLeft 1
+push constant 0
+eq
+not
+not
+if-goto L11
+push local 0
+call BinaryNode.getLeft 1
+pop local 0
+goto L10
+label L11
+push argument 1
+push local 0
+call BinaryNode.getData 1
+call BinaryNode.setData 2
+pop temp 0
+push local 0
+call removeNode 1
+pop temp 0
+label L11
+push argument 1
+pop local 0
+push argument 1
+push this 0
+eq
+not
+if-goto L12
+push this 0
+call BinaryNode.getLeft 1
+push constant 0
+eq
+not
+not
+if-goto L12
+push this 0
+call BinaryNode.getLeft 1
+pop this 0
+label L12
+push this 0
+call BinaryNode.getRight 1
+pop this 0
+label L13
+push this 0
+push constant 0
+eq
+not
+not
+if-goto L14
+push constant 0
+call root.setParent 1
+pop temp 0
+label L14
+label L15
+label L16
+push local 1
+call BinaryNode.getData 1
+push argument 1
+call BinaryNode.getData 1
+gt
+pop local 2
+push argument 1
+call BinaryNode.getLeft 1
+push constant 0
+eq
+not
+not
+if-goto L17
+push local 2
+not
+if-goto L17
+push local 1
+push argument 1
+call BinaryNode.getLeft 1
+call BinaryNode.setLeft 2
+pop temp 0
+label L17
+push local 1
+push argument 1
+call BinaryNode.getLeft 1
+call BinaryNode.setRight 2
+pop temp 0
+label L18
+label L19
+push local 2
+not
+if-goto L20
+push local 1
+push argument 1
+call BinaryNode.getRight 1
+call BinaryNode.setLeft 2
+pop temp 0
+label L20
+push local 1
+push argument 1
+call BinaryNode.getRight 1
+call BinaryNode.setRight 2
+pop temp 0
+label L21
+label L22
+label L23
+push local 0
+call BinaryNode.dispose 1
+pop temp 0
+label L24
+push local 1
+pop local 0
+label L25
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L26
+push local 0
+call rebalnce 1
+pop temp 0
+push local 0
+call BinaryNode.updateHeight 1
+pop temp 0
+push local 0
+call BinaryNode.getParent 1
+pop local 0
+goto L25
+label L26
+push constant 0
+return
+function BinaryTree.insert 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+not
+not
+if-goto L26
+push this 0
+push argument 1
+call insertHelper 2
+pop temp 0
+label L26
+push constant 0
+push constant 0
+push constant 0
+push argument 1
+call BinaryNode.new 4
+pop this 0
+label L27
+push constant 0
+return
+function BinaryTree.insertHelper 6
+push argument 0
+pop pointer 0
+push constant 1
+neg
+pop local 4
+push constant 1
+neg
+pop local 5
+push argument 1
+call BinaryNode.getLeft 1
+pop local 0
+push argument 1
+call BinaryNode.getRight 1
+pop local 1
+push argument 1
+call BinaryNode.getData 1
+pop local 3
+push local 3
+push argument 2
+gt
+push local 3
+push argument 2
+eq
+or
+not
+if-goto L28
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L28
+push local 0
+push argument 2
+call insertHelper 2
+pop temp 0
+label L28
+push constant 0
+push constant 0
+push argument 1
+push argument 2
+call BinaryNode.new 4
+pop local 2
+push argument 1
+push local 2
+call BinaryNode.setLeft 2
+pop temp 0
+push local 2
+pop local 0
+label L29
+label L30
+push local 1
+push constant 0
+eq
+not
+not
+if-goto L31
+push local 1
+push argument 2
+call insertHelper 2
+pop temp 0
+label L31
+push constant 0
+push constant 0
+push argument 1
+push argument 2
+call BinaryNode.new 4
+pop local 2
+push argument 1
+push local 2
+call BinaryNode.setRight 2
+pop temp 0
+push local 2
+pop local 1
+label L32
+label L33
+push argument 1
+call BinaryNode.updateHeight 1
+pop temp 0
+push argument 1
+call rebalnce 1
+pop temp 0
+push constant 0
+return
+function BinaryTree.rebalnce 2
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getLeft 1
+pop local 0
+push argument 1
+call BinaryNode.getRight 1
+pop local 1
+push argument 1
+call BinaryNode.getBalance 1
+push constant 2
+neg
+eq
+not
+if-goto L34
+push local 1
+call BinaryNode.getBalance 1
+push constant 0
+gt
+not
+if-goto L34
+push local 1
+call LLShift 1
+pop temp 0
+push argument 1
+call RRShift 1
+pop temp 0
+label L34
+push argument 1
+call RRShift 1
+pop temp 0
+label L35
+label L36
+label L37
+push argument 1
+call BinaryNode.getBalance 1
+push constant 2
+eq
+not
+if-goto L38
+push local 0
+call BinaryNode.getBalance 1
+push constant 0
+lt
+not
+if-goto L38
+push local 0
+call RRShift 1
+pop temp 0
+push argument 1
+call LLShift 1
+pop temp 0
+label L38
+push argument 1
+call LLShift 1
+pop temp 0
+label L39
+label L40
+label L41
+push constant 0
+return
+function BinaryTree.LLShift 3
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getParent 1
+pop local 0
+push argument 1
+call BinaryNode.getLeft 1
+pop local 1
+push argument 1
+push local 1
+call BinaryNode.getRight 1
+call BinaryNode.setLeft 2
+pop temp 0
+push local 1
+push argument 1
+call BinaryNode.setRight 2
+pop temp 0
+push argument 1
+call BinaryNode.updateHeight 1
+pop temp 0
+push local 1
+call BinaryNode.updateHeight 1
+pop temp 0
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L42
+push local 0
+call BinaryNode.getData 1
+push argument 1
+call BinaryNode.getData 1
+gt
+pop local 2
+push local 2
+not
+if-goto L42
+push local 0
+push local 1
+call BinaryNode.setLeft 2
+pop temp 0
+label L42
+push local 0
+push local 1
+call BinaryNode.setRight 2
+pop temp 0
+label L43
+label L44
+push local 1
+pop this 0
+push local 1
+push constant 0
+call BinaryNode.setParent 2
+pop temp 0
+label L45
+push constant 0
+return
+function BinaryTree.RRShift 3
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getParent 1
+pop local 0
+push argument 1
+call BinaryNode.getRight 1
+pop local 1
+push argument 1
+push local 1
+call BinaryNode.getLeft 1
+call BinaryNode.setRight 2
+pop temp 0
+push local 1
+push argument 1
+call BinaryNode.setLeft 2
+pop temp 0
+push argument 1
+call BinaryNode.updateHeight 1
+pop temp 0
+push local 1
+call BinaryNode.updateHeight 1
+pop temp 0
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L46
+push local 0
+call BinaryNode.getData 1
+push argument 1
+call BinaryNode.getData 1
+gt
+pop local 2
+push local 2
+not
+if-goto L46
+push local 0
+push local 1
+call BinaryNode.setLeft 2
+pop temp 0
+label L46
+push local 0
+push local 1
+call BinaryNode.setRight 2
+pop temp 0
+label L47
+label L48
+push local 1
+pop this 0
+push local 1
+push constant 0
+call BinaryNode.setParent 2
+pop temp 0
+label L49
+push constant 0
+return
+function BinaryTree.inorderRead 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+not
+not
+if-goto L50
+push this 0
+call inorderReadHelper 1
+pop temp 0
+call Output.println 0
+pop temp 0
+label L50
+push constant 13
+call String.new 1
+push constant 84
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 105
+call String.appendChar 2
+push constant 115
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 109
+call String.appendChar 2
+push constant 112
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+push constant 121
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+call Output.println 0
+pop temp 0
+label L51
+push constant 0
+return
+function BinaryTree.inorderReadHelper 5
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getLeft 1
+pop local 0
+push argument 1
+call BinaryNode.getRight 1
+pop local 1
+push argument 1
+call BinaryNode.getData 1
+pop local 2
+push argument 1
+call BinaryNode.getHeight 1
+pop local 3
+push argument 1
+call BinaryNode.getBalance 1
+pop local 4
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L52
+push local 0
+call inorderReadHelper 1
+pop temp 0
+label L52
+label L53
+push local 2
+call Output.printInt 1
+pop temp 0
+push constant 1
+call String.new 1
+push constant 32
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 3
+call Output.printInt 1
+pop temp 0
+push constant 1
+call String.new 1
+push constant 32
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 4
+call Output.printInt 1
+pop temp 0
+push constant 1
+call String.new 1
+push constant 32
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+call Output.println 0
+pop temp 0
+push local 1
+push constant 0
+eq
+not
+not
+if-goto L54
+push local 1
+call inorderReadHelper 1
+pop temp 0
+label L54
+label L55
+push constant 0
+return
+function BinaryTree.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+not
+not
+if-goto L56
+push this 0
+call disposeHelper 1
+pop temp 0
+label L56
+label L57
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function BinaryTree.disposeHelper 2
+push argument 0
+pop pointer 0
+push argument 1
+call BinaryNode.getLeft 1
+pop local 0
+push argument 1
+call BinaryNode.getRight 1
+pop local 1
+push local 0
+push constant 0
+eq
+not
+not
+if-goto L58
+push local 0
+call disposeHelper 1
+pop temp 0
+label L58
+label L59
+push local 1
+push constant 0
+eq
+not
+not
+if-goto L60
+push local 1
+call disposeHelper 1
+pop temp 0
+label L60
+label L61
+push argument 1
+call BinaryNode.dispose 1
+pop temp 0
+push constant 0
+return
+

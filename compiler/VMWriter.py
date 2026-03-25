@@ -29,6 +29,8 @@ LT = 5
 AND = 6
 OR = 7
 NOT = 8
+MULT = 9
+DIV = 10
 
 command_dict = {
     ADD : "add",
@@ -39,7 +41,9 @@ command_dict = {
     LT : "lt",
     AND : "and",
     OR : "or",
-    NOT : "not"
+    NOT : "not",
+    MULT : "call Math.multiply 2",
+    DIV : "call Math.divide 2"
 }
 
 
@@ -72,7 +76,7 @@ class VMWriter:
         self.output_file.write(f"function {name} {nVars}\n")
 
     def writeReturn(self):
-        self.output_file.write("return")
+        self.output_file.write("return\n")
 
     def close(self):
         self.output_file.write("\n")

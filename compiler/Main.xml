@@ -1,135 +1,31 @@
 <keyword> class </keyword>
-<keyword> function </keyword>
-<parameterList>
 </parameterList>
+<varDec>
+</varDec>
+<varDec>
+</varDec>
 <subroutineBody>
-  <varDec>
-    <identifier> BinaryTree </identifier>
-  </varDec>
-  <varDec>
-    <keyword> int </keyword>
-  </varDec>
-  <statements>
-    <letStatement>
+<statements>
+  <keyword> let </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> let </keyword>
+  <whileStatement>
+    <keyword> while </keyword>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> do </keyword>
       <keyword> let </keyword>
-      <expression>
-        <term>
-        </term>
-      </expression>
-    </letStatement>
-    <doStatement>
-      <keyword> do </keyword>
-      <expression>
-        <term>
-        </term>
-      </expression>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-    </doStatement>
-    <letStatement>
-      <keyword> let </keyword>
-      <expression>
-        <term>
-          <identifier> BinaryTree </identifier>
-          <symbol> . </symbol>
-          <expression>
-            <term>
-            </term>
-          </expression>
-        </term>
-      </expression>
-    </letStatement>
-    <whileStatement>
-      <keyword> while </keyword>
-      <expression>
-        <term>
-          <term>
-            <symbol> ( </symbol>
-            <expression>
-              <term>
-              </term>
-              <symbol> = </symbol>
-              <term>
-              </term>
-            </expression>
-          </term>
-        </term>
-      </expression>
-      <statements>
-        <doStatement>
-          <keyword> do </keyword>
-          <expression>
-            <term>
-            </term>
-          </expression>
-        </doStatement>
-        <letStatement>
-          <keyword> let </keyword>
-          <expression>
-            <term>
-            </term>
-            <symbol> - </symbol>
-            <term>
-            </term>
-          </expression>
-        </letStatement>
-      </statements>
-    </whileStatement>
-    <doStatement>
-      <keyword> do </keyword>
-      <expression>
-        <term>
-        </term>
-      </expression>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-      <expression>
-        <term>
-        </term>
-      </expression>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-      <expression>
-        <term>
-          <identifier> tree </identifier>
-          <symbol> . </symbol>
-          <expression>
-            <term>
-            </term>
-          </expression>
-        </term>
-      </expression>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-      <expression>
-        <term>
-          <identifier> tree </identifier>
-          <symbol> . </symbol>
-          <expression>
-            <term>
-            </term>
-          </expression>
-        </term>
-      </expression>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-    </doStatement>
-    <doStatement>
-      <keyword> do </keyword>
-    </doStatement>
-    <returnStatement>
-      <keyword> return </keyword>
-    </returnStatement>
-  </statements>
+    </statements>
+  </whileStatement>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> return </keyword>
+</statements>
 </subroutineBody>

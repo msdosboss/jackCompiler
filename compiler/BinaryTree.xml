@@ -1,13 +1,390 @@
-<class>
-  <keyword> class </keyword>
-  <identifier> BinaryTree </identifier>
-  <symbol> { </symbol>
-  <classVarDec>
-    <keyword> field </keyword>
-    <identifier> BinaryNode </identifier>
-    <identifier> root </identifier>
-    <symbol> ; </symbol>
-  </classVarDec>
-  <subroutineDec>
-  </subroutineDec>
-</class>
+<keyword> class </keyword>
+<subroutineBody>
+  <statements>
+    <keyword> let </keyword>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<subroutineBody>
+  <statements>
+    <keyword> if </keyword>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> return </keyword>
+      <symbol> , </symbol>
+    </statements>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<subroutineBody>
+  <statements>
+    <keyword> if </keyword>
+    <statements>
+      <keyword> do </keyword>
+      <keyword> return </keyword>
+    </statements>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> if </keyword>
+    <statements>
+      <keyword> if </keyword>
+      <symbol> ( </symbol>
+      <statements>
+        <keyword> return </keyword>
+        <symbol> , </symbol>
+      </statements>
+    </statements>
+    <keyword> else </keyword>
+    <statements>
+      <keyword> if </keyword>
+      <symbol> ( </symbol>
+      <statements>
+        <keyword> return </keyword>
+        <symbol> , </symbol>
+      </statements>
+    </statements>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<varDec>
+</varDec>
+<subroutineBody>
+  <statements>
+    <keyword> let </keyword>
+    <keyword> if </keyword>
+    <symbol> ( </symbol>
+    <symbol> ( </symbol>
+    <symbol> ( </symbol>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> let </keyword>
+      <whileStatement>
+        <keyword> while </keyword>
+        <symbol> ( </symbol>
+        <statements>
+          <keyword> let </keyword>
+        </statements>
+      </whileStatement>
+      <keyword> do </keyword>
+      <keyword> do </keyword>
+    </statements>
+    <keyword> else </keyword>
+    <statements>
+      <keyword> let </keyword>
+      <keyword> if </keyword>
+      <statements>
+        <keyword> if </keyword>
+        <symbol> ( </symbol>
+        <statements>
+          <keyword> let </keyword>
+        </statements>
+        <keyword> else </keyword>
+        <statements>
+          <keyword> let </keyword>
+        </statements>
+        <keyword> if </keyword>
+        <symbol> ( </symbol>
+        <statements>
+          <keyword> do </keyword>
+        </statements>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> let </keyword>
+        <symbol> ( </symbol>
+        <keyword> if </keyword>
+        <symbol> ( </symbol>
+        <statements>
+          <keyword> if </keyword>
+          <statements>
+            <keyword> do </keyword>
+          </statements>
+          <keyword> else </keyword>
+          <statements>
+            <keyword> do </keyword>
+          </statements>
+        </statements>
+        <keyword> else </keyword>
+        <statements>
+          <keyword> if </keyword>
+          <statements>
+            <keyword> do </keyword>
+          </statements>
+          <keyword> else </keyword>
+          <statements>
+            <keyword> do </keyword>
+          </statements>
+        </statements>
+      </statements>
+      <keyword> do </keyword>
+    </statements>
+    <keyword> let </keyword>
+    <whileStatement>
+      <keyword> while </keyword>
+      <symbol> ( </symbol>
+      <statements>
+        <keyword> do </keyword>
+        <keyword> do </keyword>
+        <keyword> let </keyword>
+      </statements>
+    </whileStatement>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<subroutineBody>
+  <statements>
+    <keyword> if </keyword>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> do </keyword>
+      <symbol> , </symbol>
+    </statements>
+    <keyword> else </keyword>
+    <statements>
+      <keyword> let </keyword>
+      <symbol> , </symbol>
+      <symbol> , </symbol>
+      <symbol> , </symbol>
+    </statements>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<varDec>
+</varDec>
+<subroutineBody>
+  <statements>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> if </keyword>
+    <symbol> ( </symbol>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> if </keyword>
+      <symbol> ( </symbol>
+      <statements>
+        <keyword> do </keyword>
+        <symbol> , </symbol>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> let </keyword>
+        <symbol> , </symbol>
+        <symbol> , </symbol>
+        <symbol> , </symbol>
+        <keyword> do </keyword>
+        <keyword> let </keyword>
+      </statements>
+    </statements>
+    <keyword> else </keyword>
+    <statements>
+      <keyword> if </keyword>
+      <symbol> ( </symbol>
+      <statements>
+        <keyword> do </keyword>
+        <symbol> , </symbol>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> let </keyword>
+        <symbol> , </symbol>
+        <symbol> , </symbol>
+        <symbol> , </symbol>
+        <keyword> do </keyword>
+        <keyword> let </keyword>
+      </statements>
+    </statements>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<subroutineBody>
+  <statements>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> if </keyword>
+    <statements>
+      <keyword> if </keyword>
+      <statements>
+        <keyword> do </keyword>
+        <keyword> do </keyword>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> do </keyword>
+      </statements>
+    </statements>
+    <keyword> if </keyword>
+    <statements>
+      <keyword> if </keyword>
+      <statements>
+        <keyword> do </keyword>
+        <keyword> do </keyword>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> do </keyword>
+      </statements>
+    </statements>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<varDec>
+</varDec>
+<subroutineBody>
+  <statements>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> if </keyword>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> let </keyword>
+      <symbol> ( </symbol>
+      <keyword> if </keyword>
+      <statements>
+        <keyword> do </keyword>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> do </keyword>
+      </statements>
+    </statements>
+    <keyword> else </keyword>
+    <statements>
+      <keyword> let </keyword>
+      <keyword> do </keyword>
+    </statements>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<varDec>
+</varDec>
+<subroutineBody>
+  <statements>
+    <keyword> let </keyword>
+    <keyword> let </keyword>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+    <keyword> if </keyword>
+    <symbol> ( </symbol>
+    <statements>
+      <keyword> let </keyword>
+      <symbol> ( </symbol>
+      <keyword> if </keyword>
+      <statements>
+        <keyword> do </keyword>
+      </statements>
+      <keyword> else </keyword>
+      <statements>
+        <keyword> do </keyword>
+      </statements>
+    </statements>
+    <keyword> else </keyword>
+    <statements>
+      <keyword> let </keyword>
+      <keyword> do </keyword>
+    </statements>
+    <keyword> return </keyword>
+  </statements>
+</subroutineBody>
+</parameterList>
+<subroutineBody>
+<statements>
+  <keyword> if </keyword>
+  <symbol> ( </symbol>
+  <statements>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+  </statements>
+  <keyword> else </keyword>
+  <statements>
+    <keyword> do </keyword>
+    <keyword> do </keyword>
+  </statements>
+  <keyword> return </keyword>
+</statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<varDec>
+</varDec>
+<subroutineBody>
+<statements>
+  <keyword> let </keyword>
+  <keyword> let </keyword>
+  <keyword> let </keyword>
+  <keyword> let </keyword>
+  <keyword> let </keyword>
+  <keyword> if </keyword>
+  <symbol> ( </symbol>
+  <statements>
+    <keyword> do </keyword>
+  </statements>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> do </keyword>
+  <keyword> if </keyword>
+  <symbol> ( </symbol>
+  <statements>
+    <keyword> do </keyword>
+  </statements>
+  <keyword> return </keyword>
+</statements>
+</subroutineBody>
+</parameterList>
+<subroutineBody>
+<statements>
+<keyword> if </keyword>
+<symbol> ( </symbol>
+<statements>
+  <keyword> do </keyword>
+</statements>
+<keyword> do </keyword>
+<keyword> return </keyword>
+</statements>
+</subroutineBody>
+<varDec>
+</varDec>
+<subroutineBody>
+<statements>
+<keyword> let </keyword>
+<keyword> let </keyword>
+<keyword> if </keyword>
+<symbol> ( </symbol>
+<statements>
+  <keyword> do </keyword>
+</statements>
+<keyword> if </keyword>
+<symbol> ( </symbol>
+<statements>
+  <keyword> do </keyword>
+</statements>
+<keyword> do </keyword>
+<keyword> return </keyword>
+</statements>
+</subroutineBody>
