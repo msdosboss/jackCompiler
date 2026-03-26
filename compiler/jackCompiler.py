@@ -27,15 +27,21 @@ if __name__ == "__main__":
     else:
         file_names.append(sys.argv[1])
         
+    label_index = 0
     for file_name in file_names:
         class_symbol_table = SymbolTable()
         subroutine_symbol_table = SymbolTable()
         writer = VMWriter(file_name)
         tokenizer = Tokenizer(file_name)
-        compilationEngine = CompilationEngine(tokenizer, file_name, class_symbol_table, subroutine_symbol_table, writer)
+        dir_index = file_name.rfind('/')
+        if(dir_index != -1):
+            file_name = file_name[dir_index + 1:]
+        compilationEngine = CompilationEngine(tokenizer, file_name, class_symbol_table, subroutine_symbol_table, writer, label_index)
         try:
             compilationEngine.compileClass()
         except JackSyntaxError as e:
             print(e)
         except JackReferenceError as e:
             print(e)
+
+        label_index += compilationEngine.label_counter

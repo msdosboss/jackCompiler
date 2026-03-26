@@ -200,6 +200,12 @@ class Tokenizer:
 
 
         self.current_token = ""
+        if(self.current_char in symbol_set):
+            self.token_type = SYMBOL
+            self.current_token = self.current_char
+            self._advanceFileText() 
+            return True
+
         if(self.current_char == '\"'):
             self.token_type = STRING_CONST
             self._advanceFileText()

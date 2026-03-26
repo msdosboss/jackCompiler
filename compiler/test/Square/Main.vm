@@ -1,4 +1,4 @@
-function test/Square/Main.main 1
+function Main.main 1
 call SquareGame.new 0
 pop local 0
 push local 0
@@ -9,10 +9,10 @@ call SquareGame.dispose 1
 pop temp 0
 push constant 0
 return
-function test/Square/Main.more 4
+function Main.more 4
 push constant 0
 not
-if-goto L0
+if-goto FalseL7
 push constant 15
 call String.new 1
 push constant 115
@@ -59,7 +59,8 @@ push that 0
 pop pointer 1
 pop temp 0
 pop that 0
-label L0
+goto TrueL7
+label FalseL7
 push local 0
 push local 1
 neg
@@ -74,7 +75,7 @@ push local 0
 push local 1
 or
 pop local 0
-label L1
+label TrueL7
 push constant 0
 return
 

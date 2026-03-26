@@ -130,7 +130,7 @@ keyword_const_set = {
 }
 
 class CompilationEngine:
-    def __init__(self, tokenizer : Tokenizer, input_file_name : str, class_symbol_table : SymbolTable, subroutine_symbol_table : SymbolTable, writer : VMWriter):
+    def __init__(self, tokenizer : Tokenizer, input_file_name : str, class_symbol_table : SymbolTable, subroutine_symbol_table : SymbolTable, writer : VMWriter, label_counter : int):
         self.tokenizer = tokenizer
         self.input_file_name = input_file_name
         self.tab_count = 0
@@ -144,7 +144,7 @@ class CompilationEngine:
         self.class_symbol_table = class_symbol_table
         self.subroutine_symbol_table = subroutine_symbol_table
         self.writer = writer
-        self.label_counter = 0
+        self.label_counter = label_counter
 
 
     def _whichSymbolTable(self, token, error = True):
@@ -405,8 +405,9 @@ class CompilationEngine:
             self.compileExpression()
 
             self._symbolCheck(';', "compileLet")
-            self.writer.writePop(POINTER_SEG, 1)
             self.writer.writePop(TEMP_SEG, 0)
+            self.writer.writePop(POINTER_SEG, 1)
+            self.writer.writePush(TEMP_SEG, 0)
             self.writer.writePop(THAT_SEG, 0)
 
         else:
@@ -432,14 +433,16 @@ class CompilationEngine:
         self._symbolCheck('{', "compileIf")
 
         self.writer.writeArithmetic(NOT)
-        self.writer.writeIf(f"L{self.label_counter}")
+        self.label_counter += 1
+        label_counter = self.label_counter
+        self.writer.writeIf(f"FalseL{label_counter}")
 
         self.compileStatements()
         
         self._symbolCheck('}', "compileIf")
 
-        self.writer.writeLabel(f"L{self.label_counter}")
-        self.label_counter += 1
+        self.writer.writeGoto(f"TrueL{label_counter}")
+        self.writer.writeLabel(f"FalseL{label_counter}")
 
         #optional else check
         if(self.tokenizer.keyWord() == ELSE):
@@ -451,8 +454,7 @@ class CompilationEngine:
             
             self._symbolCheck('}', "compileIf")
 
-        self.writer.writeLabel(f"L{self.label_counter}")
-        self.label_counter += 1
+        self.writer.writeLabel(f"TrueL{label_counter}")
 
         
 
@@ -461,7 +463,9 @@ class CompilationEngine:
 
         self._symbolCheck('(', "compileWhile")
 
-        self.writer.writeLabel(f"L{self.label_counter}")
+        self.label_counter += 1
+        label_counter = self.label_counter
+        self.writer.writeLabel(f"WhileStartL{label_counter}")
 
         self.compileExpression()
 
@@ -470,15 +474,14 @@ class CompilationEngine:
         self._symbolCheck('{', "compileWhile")
 
         self.writer.writeArithmetic(NOT)
-        self.writer.writeIf(f"L{self.label_counter + 1}")
+        self.writer.writeIf(f"WhileEndL{label_counter}")
 
         self.compileStatements()
         
         self._symbolCheck('}', "compileWhile")
 
-        self.writer.writeGoto(f"L{self.label_counter}")
-        self.label_counter += 1
-        self.writer.writeLabel(f"L{self.label_counter}")
+        self.writer.writeGoto(f"WhileStartL{label_counter}")
+        self.writer.writeLabel(f"WhileEndL{label_counter}")
 
 
 
@@ -491,7 +494,7 @@ class CompilationEngine:
         nArgs = 0
         if(self.tokenizer.current_token == '.'):
             # Pushing pointer to obj as 0th arg
-            if(self.subroutine_symbol_table.isIn(first_token) or self.subroutine_symbol_table.isIn(first_token)):
+            if(self.subroutine_symbol_table.isIn(first_token) or self.class_symbol_table.isIn(first_token)):
                 symbol_table = self._whichSymbolTable(first_token)
                 segment = kind_to_seg_dict[symbol_table.kindOf(first_token)]
                 index = symbol_table.indexOf(first_token)
@@ -517,7 +520,9 @@ class CompilationEngine:
                     expected_token = "( or ."
                 )
         else:
+            nArgs += 1
             function_name = f"{self.input_file_name.replace(".jack", "")}.{first_token}"
+            self.writer.writePush(POINTER_SEG, 0)
         
         self._symbolCheck('(', "compileDo")
         nArgs += self.compileExpressionList()
