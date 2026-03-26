@@ -1,4 +1,4 @@
-function Main.main 1
+function test/Square/Main.main 1
 call SquareGame.new 0
 pop local 0
 push local 0
@@ -9,7 +9,7 @@ call SquareGame.dispose 1
 pop temp 0
 push constant 0
 return
-function Main.more 4
+function test/Square/Main.more 4
 push constant 0
 not
 if-goto L0

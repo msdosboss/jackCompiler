@@ -23,7 +23,7 @@ if (__name__ == "__main__"):
     else:
         if (os.path.exists(sys.argv[1])):
             file_name = sys.argv[1]
-            if(".vm" in file_name):
+            if(".jack" in file_name):
                 file_names.append(file_name)
             else:
                 file_names = os.listdir(file_name)
