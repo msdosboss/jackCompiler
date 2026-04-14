@@ -29,6 +29,10 @@ class Parse:
         file.close()
         self.index = -1
         self.instruction_type = None
+        # For whatever reason the program does not like it when you end with a blank new line
+        # I probably could have fixed the underlying parsing problem, but this works too
+        if(self.lines_list[-1] == "\n"):
+            self.lines_list.pop()
 
     def hasMoreLines(self) -> bool:
         if (self.index + 1 >= len(self.lines_list)):
