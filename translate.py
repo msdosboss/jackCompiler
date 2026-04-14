@@ -36,7 +36,7 @@ if (__name__ == "__main__"):
             file_names.append("orca.vm")
             print(f"{sys.argv[1]} does not exist, using {file_name}")
 
-    code_writer = CodeWriter(file_names[0].replace(".vm", ".asm"))
+    code_writer = CodeWriter(f"{sys.argv[1].replace("/", "")}/out.asm")
 
     code_writer.writeInit()
 
