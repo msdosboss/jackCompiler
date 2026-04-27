@@ -43,7 +43,7 @@ ARITHMETIC_TRANSLATIONS = {
     "neg" : [
                 "@SP",
                 "AM=M-1",
-                "-M",
+                "M=-M",
                 "@SP",
                 "M=M+1"
             ],
