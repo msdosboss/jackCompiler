@@ -107,9 +107,12 @@ class Tokenizer:
 
 
     def _skipWhiteSpace(self):
+        if(self.hasMoreTokens() is False):
+            return False
         #skips all white space
         while(self.current_char == ' ' or self.current_char == '\t' or len(self.file_text[self.line_index]) == 0): 
             self._advanceFileText()
+        return True
 
     def _advanceFileText(self):
         self.str_index += 1
@@ -185,7 +188,8 @@ class Tokenizer:
                     # move past the */ chars
                     self._advanceFileText()
                     self._advanceFileText()
-                    self._skipWhiteSpace()
+                    if(self._skipWhiteSpace() is False):
+                        return False
                     if(self.current_char == '/' and self.file_text[self.line_index][self.str_index + 1] == '/'):
                         while((self.current_char == '/' and self.file_text[self.line_index][self.str_index] == '/') or 
                               len(self.file_text[self.line_index]) == 0):
