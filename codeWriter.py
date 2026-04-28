@@ -1,3 +1,4 @@
+import os
 from parser import C_PUSH
 from parser import C_POP
 
@@ -78,7 +79,7 @@ ARITHMETIC_TRANSLATIONS = {
                 "AM=M-1",
                 "D=M-D",
                 "@TRUE",
-                "D;JGE",
+                "D;JGT",
                 "(FALSE)",
                 "@SP",
                 "A=M",
@@ -158,10 +159,9 @@ init_instructions = [
 
 class CodeWriter:
     def __init__(self, file_name : str = "vm.asm"):
-        self.file_name = file_name
-        self.file_name = self.file_name.replace("/", "_")
-        self.file_name = self.file_name.replace(".vm","")
         self.file = open(file_name, "w")
+        base_name = os.path.basename(file_name)
+        self.file_name = base_name.replace(".vm", "")
         self.write_count = 0
         self.current_function = ""
         self.call_count = 0
@@ -172,9 +172,8 @@ class CodeWriter:
             self.write_count += 1
 
     def setFileName(self, file_name : str):
-        file_name = file_name.replace("/", "_")
-        self.file_name = file_name
-        self.file_name = self.file_name.replace(".vm","")
+        base_name = os.path.basename(file_name)
+        self.file_name = base_name.replace(".vm", "")
 
     def writeInit(self):
         self._writeInstructions(init_instructions)
