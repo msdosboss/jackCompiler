@@ -479,7 +479,7 @@ class CodeWriter:
 
         self._writeInstructions(return_instructions) 
 
-        self.call_count = 0
+        #self.call_count = 0
 
     def close(self):
         self.file.close()
